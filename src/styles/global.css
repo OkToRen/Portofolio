@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  
+  /* Dark mode colors (default) */
+  --color-background: #0f0f10;
+  --color-surface: #18181b;
+  --color-primary: #d4d4d8;
+  --color-accent: #3b82f6;
+  --color-muted: #71717a;
+  --color-border: #27272a;
+}
+
+/* Light mode colors */
+.light {
+  --color-background: #ffffff;
+  --color-surface: #f5f5f5;
+  --color-primary: #1a1a1a;
+  --color-accent: #2563eb;
+  --color-muted: #737373;
+  --color-border: #e5e5e5;
+}

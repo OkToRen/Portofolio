@@ -1,0 +1,169 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Data extracted directly from your CV
+const personal = {
+  name: "Darren Oliver P. Haryanto",
+  role: "Lab Resource Management & CS Student",
+  location: "Binus Alam Sutera",
+  contact: {
+    email: "darrenharyanto@gmail.com",
+    linkedin: "www.linkedin.com/in/darren-haryanto-164841264",
+    phone: "+62 811-1777-566" 
+  }
+};
+
+const experience = [
+  {
+    role: "Laboratory Resource Management Officer",
+    company: "Bina Nusantara Alam Sutera",
+    date: "Jan 2026 - Present",
+    desc: [
+      "Guiding and managing Laboratory assistants.",
+      "Allocating schedules and leading briefings.",
+      "Handling recruitment for all Binus Laboratories."
+    ]
+  },
+  {
+    role: "Full-Time Software Lab Assistant",
+    company: "Bina Nusantara Alam Sutera",
+    date: "Feb 2025 - Jan 2026",
+    desc: [
+      "Taught students and graded projects/quizzes.",
+      "Managed software lab trainee presentations.",
+      "Passed Progressive Assistant Tests with distinction."
+    ]
+  },
+  {
+    role: "Part-Time Software Lab Assistant",
+    company: "Bina Nusantara Alam Sutera",
+    date: "Sep 2024 - Jan 2025",
+    desc: [
+      " instructed students and developed quiz/project materials."
+    ]
+  }
+];
+
+const education = [
+  {
+    school: "Universitas Bina Nusantara",
+    degree: "Bachelor of Computer Science",
+    date: "2023 - 2027 (Expected)",
+    gpa: "3.82/4.00",
+    note: "Scholarship Mentor for Odd Semester 2025/2026"
+  },
+  {
+    school: "IPEKA Puri",
+    degree: "High School Diploma",
+    date: "2020 - 2023",
+    gpa: "88.96/100"
+  }
+];
+
+const skills = [
+  "Rust", "Golang", "C/C#", "Java", 
+  "React", "Next.js", "T-SQL", "PostgreSQL"
+];
+---
+
+<Layout title={personal.name}>
+  <!-- Hero Section -->
+  <header class="mb-24 pb-16 border-b border-border">
+    <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-primary mb-3">
+      {personal.name}
+    </h1>
+    <p class="text-muted text-xl mb-8">{personal.role}</p>
+    
+    <div class="flex flex-wrap gap-4 text-sm text-accent">
+      <a href={`mailto:${personal.contact.email}`} class="hover:underline hover:text-primary transition-colors">
+        Email
+      </a>
+      <span class="text-border">/</span>
+      <a href={`https://${personal.contact.linkedin}`} target="_blank" class="hover:underline hover:text-primary transition-colors">
+        LinkedIn
+      </a>
+      <span class="text-border">/</span>
+      <span class="text-muted">{personal.contact.phone}</span>
+    </div>
+  </header>
+
+  <!-- About Section -->
+  <section class="mb-24 pb-16 border-b border-border">
+    <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">About</h2>
+    <p class="text-muted leading-relaxed text-lg">
+      Computer Science student and Laboratory Assistant with a strong passion for coding. 
+      Experienced in low-level languages like <span class="text-primary font-semibold">Rust</span> and <span class="text-primary font-semibold">C</span>, 
+      as well as modern web development. Accustomed to teaching, collaboration, and managing 
+      technical teams.
+    </p>
+  </section>
+
+  <!-- Experience Section -->
+  <section class="mb-24 pb-16 border-b border-border">
+    <h2 class="text-primary font-bold mb-8 uppercase tracking-wider text-sm">Experience</h2>
+    <div class="space-y-12">
+      {experience.map((job) => (
+        <div class="group relative pl-6 border-l-2 border-border hover:border-accent transition-colors duration-300">
+          <div class="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-surface border-2 border-border group-hover:border-accent group-hover:bg-accent transition-all duration-300"></div>
+          <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-3">
+            <h3 class="text-primary font-semibold text-lg">{job.role}</h3>
+            <span class="text-xs text-muted font-mono bg-surface px-3 py-1 rounded-full">{job.date}</span>
+          </div>
+          <p class="text-sm text-accent mb-4">{job.company}</p>
+          <ul class="list-disc list-inside text-base text-muted space-y-2">
+            {job.desc.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="mb-24 pb-16 border-b border-border">
+    <h2 class="text-primary font-bold mb-8 uppercase tracking-wider text-sm">Technical Stack</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {skills.map((skill) => (
+        <div class="bg-surface border border-border hover:border-accent p-4 rounded-lg text-center text-sm font-medium transition-all hover:-translate-y-1 hover:shadow-lg">
+          {skill}
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Education & Organization Section -->
+  <section class="grid md:grid-cols-2 gap-12 mb-24 pb-16">
+    <div class="bg-surface border border-border rounded-lg p-8">
+      <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">Education</h2>
+      {education.map((edu) => (
+        <div class="mb-8 last:mb-0">
+          <h3 class="text-primary font-semibold text-lg">{edu.school}</h3>
+          <p class="text-muted mt-1">{edu.degree}</p>
+          <div class="flex justify-between items-center mt-3">
+            <span class="text-xs text-muted">{edu.date}</span>
+            <span class="text-xs text-accent bg-accent/10 px-3 py-1 rounded-full font-semibold">{edu.gpa}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+    
+    <div class="bg-surface border border-border rounded-lg p-8">
+      <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">Organization</h2>
+      <div class="mb-8">
+        <h3 class="text-primary font-semibold text-lg">Ureeka Alam Sutera</h3>
+        <p class="text-muted mt-1">Member (Hackathons & Support)</p>
+        <span class="text-xs text-muted block mt-3">Apr 2024 - Present</span>
+      </div>
+      <div>
+        <h3 class="text-primary font-semibold text-lg">First Year Program</h3>
+        <p class="text-muted mt-1">Freshmen Partner</p>
+        <span class="text-xs text-muted block mt-3">Feb 2024 - Jan 2025</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="text-center text-sm text-muted pt-10 border-t border-border">
+    <p>&copy; {new Date().getFullYear()} Darren Oliver P. Haryanto. Built with Astro.</p>
+  </footer>
+</Layout>
