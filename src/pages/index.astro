@@ -3,7 +3,7 @@ import Layout from '../layouts/Layout.astro';
 
 // Data extracted directly from your CV
 const personal = {
-  name: "Darren Oliver P. Haryanto",
+  name: "Darren Haryanto",
   role: "Lab Resource Management & CS Student",
   location: "Binus Alam Sutera",
   contact: {
@@ -67,25 +67,94 @@ const skills = [
 ---
 
 <Layout title={personal.name}>
-  <!-- Hero Section -->
-  <header class="mb-24 pb-16 border-b border-border">
-    <h1 class="text-4xl md:text-5xl font-bold tracking-tight text-primary mb-3">
-      {personal.name}
-    </h1>
-    <p class="text-muted text-xl mb-8">{personal.role}</p>
-    
-    <div class="flex flex-wrap gap-4 text-sm text-accent">
-      <a href={`mailto:${personal.contact.email}`} class="hover:underline hover:text-primary transition-colors">
-        Email
-      </a>
-      <span class="text-border">/</span>
-      <a href={`https://${personal.contact.linkedin}`} target="_blank" class="hover:underline hover:text-primary transition-colors">
-        LinkedIn
-      </a>
-      <span class="text-border">/</span>
-      <span class="text-muted">{personal.contact.phone}</span>
+  <!-- Full-Screen Hero Section with Parallax -->
+  <div class="hero-wrapper" id="hero-wrapper">
+    <div class="hero-section" id="hero">
+      <div class="parallax-bg">
+        <div class="floating-element elem-1"></div>
+        <div class="floating-element elem-2"></div>
+        <div class="floating-element elem-3"></div>
+        <div class="floating-element elem-4"></div>
+        <div class="floating-element elem-5"></div>
+        
+        <!-- Hand-drawn doodles with cycle animations -->
+        <svg class="doodle-svg doodle-1" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <path class="doodle-path" d="M 50 100 Q 70 50, 100 70 T 150 100" 
+                stroke="currentColor" fill="none" stroke-width="3" 
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        
+        <svg class="doodle-svg doodle-2" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+          <circle class="doodle-path" cx="75" cy="75" r="50" 
+                  stroke="currentColor" fill="none" stroke-width="2.5" 
+                  stroke-dasharray="5,5" stroke-linecap="round"/>
+        </svg>
+        
+        <svg class="doodle-svg doodle-3" viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
+          <path class="doodle-path" d="M 30 90 L 70 50 L 110 90 L 150 60" 
+                stroke="currentColor" fill="none" stroke-width="3" 
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        
+        <svg class="doodle-svg doodle-4" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
+          <path class="doodle-path" d="M 50 50 L 110 50 L 110 110 L 50 110 Z" 
+                stroke="currentColor" fill="none" stroke-width="2.5" 
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        
+        <svg class="doodle-svg doodle-5" viewBox="0 0 140 140" xmlns="http://www.w3.org/2000/svg">
+          <path class="doodle-path" d="M 70 30 L 90 50 L 110 40 L 100 70 L 120 90 L 90 85 L 70 110 L 50 85 L 20 90 L 40 70 L 30 40 L 50 50 Z" 
+                stroke="currentColor" fill="none" stroke-width="2" 
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        
+        <svg class="doodle-svg doodle-6" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <path class="doodle-path" d="M 30 60 Q 40 30, 60 40 Q 80 50, 90 60 Q 80 70, 60 80 Q 40 90, 30 60" 
+                stroke="currentColor" fill="none" stroke-width="2.5" 
+                stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        
+        <svg class="doodle-svg doodle-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <circle class="doodle-path" cx="50" cy="30" r="8" stroke="currentColor" fill="none" stroke-width="2"/>
+          <circle class="doodle-path" cx="25" cy="60" r="6" stroke="currentColor" fill="none" stroke-width="2"/>
+          <circle class="doodle-path" cx="75" cy="65" r="7" stroke="currentColor" fill="none" stroke-width="2"/>
+        </svg>
+      </div>
+      
+      <header class="hero-content">
+        <div class="hero-inner">
+          <h1 class="hero-name">
+            {personal.name}
+          </h1>
+          <p class="hero-role">{personal.role}</p>
+          
+          <div class="hero-contacts">
+            <a href={`mailto:${personal.contact.email}`} class="hero-link">
+              Email
+            </a>
+            <span class="divider">/</span>
+            <a href={`https://${personal.contact.linkedin}`} target="_blank" class="hero-link">
+              LinkedIn
+            </a>
+            <span class="divider">/</span>
+            <span class="hero-phone">{personal.contact.phone}</span>
+          </div>
+        </div>
+        
+        <!-- <div class="scroll-prompt">
+          <span>Scroll to explore</span>
+          <div class="scroll-arrow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div> -->
+      </header>
     </div>
-  </header>
+  </div>
+  
+  <!-- Portfolio Content Section -->
+  <div class="portfolio-content" id="content">
 
   <!-- About Section -->
   <section class="mb-24 pb-16 border-b border-border">
@@ -164,6 +233,582 @@ const skills = [
   </section>
 
   <footer class="text-center text-sm text-muted pt-10 border-t border-border">
-    <p>&copy; {new Date().getFullYear()} Darren Oliver P. Haryanto. Built with Astro.</p>
+    <p>&copy; {new Date().getFullYear()} Darren Haryanto. Built with Astro.</p>
   </footer>
+  </div>
 </Layout>
+
+<style>
+  /* Hero Wrapper */
+  .hero-wrapper {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .hero-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  
+  /* Parallax Background */
+  .parallax-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  
+  .floating-element {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    opacity: 0.4;
+    animation: drift 15s infinite ease-in-out;
+  }
+  
+  .elem-1 {
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    top: -10%;
+    left: -10%;
+    animation-duration: 20s;
+    animation-delay: 0s;
+  }
+  
+  .elem-2 {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, #06b6d4, #3b82f6);
+    top: 10%;
+    right: -5%;
+    animation-duration: 25s;
+    animation-delay: 2s;
+  }
+  
+  .elem-3 {
+    width: 350px;
+    height: 350px;
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    bottom: -10%;
+    left: 20%;
+    animation-duration: 22s;
+    animation-delay: 4s;
+  }
+  
+  .elem-4 {
+    width: 250px;
+    height: 250px;
+    background: linear-gradient(135deg, #8b5cf6, #ec4899);
+    bottom: 20%;
+    right: 15%;
+    animation-duration: 18s;
+    animation-delay: 1s;
+  }
+  
+  .elem-5 {
+    width: 200px;
+    height: 200px;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    top: 50%;
+    left: 50%;
+    animation-duration: 30s;
+    animation-delay: 3s;
+  }
+  
+  @keyframes drift {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+    }
+    25% {
+      transform: translate(50px, -50px) scale(1.1);
+    }
+    50% {
+      transform: translate(-30px, 70px) scale(0.9);
+    }
+    75% {
+      transform: translate(70px, 30px) scale(1.05);
+    }
+  }
+
+  /* Hand-drawn doodles with rustic feel */
+  .doodle-svg {
+    position: absolute;
+    opacity: 0;
+    color: var(--color-accent);
+    pointer-events: none;
+    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.2));
+  }
+
+  .doodle-1 {
+    width: 200px;
+    height: 200px;
+    top: 12%;
+    left: 8%;
+    animation: doodleCycle 12s ease-in-out infinite;
+    animation-delay: 0s;
+    transform: rotate(-15deg);
+  }
+
+  .doodle-2 {
+    width: 150px;
+    height: 150px;
+    top: 65%;
+    right: 10%;
+    animation: doodleCycle 14s ease-in-out infinite;
+    animation-delay: 2s;
+    transform: rotate(10deg);
+  }
+
+  .doodle-3 {
+    width: 180px;
+    height: 180px;
+    bottom: 15%;
+    left: 15%;
+    animation: doodleCycle 16s ease-in-out infinite;
+    animation-delay: 4s;
+    transform: rotate(5deg);
+  }
+
+  .doodle-4 {
+    width: 160px;
+    height: 160px;
+    top: 40%;
+    right: 18%;
+    animation: doodleCycle 13s ease-in-out infinite;
+    animation-delay: 6s;
+    transform: rotate(-8deg);
+  }
+
+  .doodle-5 {
+    width: 140px;
+    height: 140px;
+    top: 20%;
+    right: 35%;
+    animation: doodleCycle 15s ease-in-out infinite;
+    animation-delay: 8s;
+    transform: rotate(12deg);
+  }
+
+  .doodle-6 {
+    width: 120px;
+    height: 120px;
+    bottom: 30%;
+    left: 35%;
+    animation: doodleCycle 17s ease-in-out infinite;
+    animation-delay: 10s;
+    transform: rotate(-12deg);
+  }
+
+  .doodle-7 {
+    width: 100px;
+    height: 100px;
+    top: 55%;
+    left: 25%;
+    animation: doodleCycle 11s ease-in-out infinite;
+    animation-delay: 3s;
+    transform: rotate(8deg);
+  }
+
+  /* Hand-drawn path animation with rustic feel */
+  .doodle-path {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+
+  /* Doodle cycle: fade in, draw, stay visible, fade out */
+  @keyframes doodleCycle {
+    0% {
+      opacity: 0;
+    }
+    5% {
+      opacity: 0.6;
+    }
+    20% {
+      opacity: 0.6;
+    }
+    /* Draw phase */
+    30% {
+      opacity: 0.6;
+    }
+    /* Stay visible */
+    70% {
+      opacity: 0.6;
+    }
+    /* Fade out */
+    85% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  /* Animating each doodle's path */
+  .doodle-1 .doodle-path {
+    animation: drawPath 12s ease-in-out infinite;
+    animation-delay: 0s;
+  }
+
+  .doodle-2 .doodle-path {
+    animation: drawPath 14s ease-in-out infinite;
+    animation-delay: 2s;
+  }
+
+  .doodle-3 .doodle-path {
+    animation: drawPath 16s ease-in-out infinite;
+    animation-delay: 4s;
+  }
+
+  .doodle-4 .doodle-path {
+    animation: drawPath 13s ease-in-out infinite;
+    animation-delay: 6s;
+  }
+
+  .doodle-5 .doodle-path {
+    animation: drawPath 15s ease-in-out infinite;
+    animation-delay: 8s;
+  }
+
+  .doodle-6 .doodle-path {
+    animation: drawPath 17s ease-in-out infinite;
+    animation-delay: 10s;
+  }
+
+  .doodle-7 .doodle-path {
+    animation: drawPath 11s ease-in-out infinite;
+    animation-delay: 3s;
+  }
+
+  @keyframes drawPath {
+    0% {
+      stroke-dashoffset: 1000;
+    }
+    5% {
+      stroke-dashoffset: 1000;
+    }
+    /* Drawing phase */
+    30% {
+      stroke-dashoffset: 0;
+    }
+    /* Stay drawn */
+    70% {
+      stroke-dashoffset: 0;
+    }
+    /* Erase */
+    85% {
+      stroke-dashoffset: -1000;
+    }
+    100% {
+      stroke-dashoffset: -1000;
+    }
+  }
+  
+  /* Hero Content */
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 100%;
+    max-width: 1000px;
+    padding: 0 2rem;
+  }
+  
+  .hero-inner {
+    animation: fadeInUp 1.2s ease-out;
+  }
+  
+  .hero-name {
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 900;
+    line-height: 1.075;
+    letter-spacing: -0.04em;
+    color: var(--color-primary);
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeInUp 1.2s ease-out 0.2s both, glow 3s ease-in-out infinite;
+  }
+  
+  @keyframes glow {
+    0%, 100% {
+      filter: drop-shadow(0 0 30px rgba(59, 130, 246, 0.3));
+    }
+    50% {
+      filter: drop-shadow(0 0 50px rgba(59, 130, 246, 0.5));
+    }
+  }
+  
+  .hero-role {
+    font-size: clamp(1.25rem, 3vw, 2.25rem);
+    color: var(--color-muted);
+    margin-bottom: 3rem;
+    animation: fadeInUp 1.2s ease-out 0.4s both;
+    font-weight: 300;
+  }
+  
+  .hero-contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.125rem;
+    animation: fadeInUp 1.2s ease-out 0.6s both;
+  }
+  
+  .hero-link {
+    color: var(--color-accent);
+    text-decoration: none;
+    position: relative;
+    font-weight: 500;
+    transition: color 0.3s ease;
+  }
+  
+  .hero-link::before {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
+  }
+  
+  .hero-link:hover::before {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  
+  .hero-link:hover {
+    color: var(--color-primary);
+  }
+  
+  .divider {
+    color: var(--color-border);
+    font-weight: 300;
+  }
+  
+  .hero-phone {
+    color: var(--color-muted);
+  }
+  
+  /* Scroll Prompt */
+  .scroll-prompt {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    animation: fadeIn 1.5s ease-out 1s both;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    pointer-events: auto;
+    z-index: 1;
+  }
+  
+  .scroll-prompt:hover {
+    color: var(--color-accent);
+  }
+  
+  .scroll-arrow {
+    animation: bounce 2s infinite;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+    60% {
+      transform: translateY(-5px);
+    }
+  }
+  
+  /* Portfolio Content */
+  .portfolio-content {
+    position: relative;
+    background: var(--color-background);
+    z-index: 20;
+    margin-top: 100vh;
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  
+  .portfolio-content.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Section animations */
+  .portfolio-content section {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  
+  .portfolio-content section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  @media (max-width: 768px) {
+    .floating-element {
+      filter: blur(40px);
+      opacity: 0.3;
+    }
+    
+    .hero-contacts {
+      font-size: 1rem;
+      gap: 1rem;
+    }
+  }
+</style>
+
+<script>
+  // Parallax scroll effect
+  let ticking = false;
+  let scrollThreshold = false;
+  
+  function handleScroll() {
+    const scrollY = window.scrollY;
+    const windowHeight = window.innerHeight;
+    const hero = document.getElementById('hero');
+    const heroInner = document.querySelector('.hero-inner') as HTMLElement;
+    const parallaxBg = document.querySelector('.parallax-bg') as HTMLElement;
+    const floatingElements = document.querySelectorAll('.floating-element');
+    const content = document.getElementById('content');
+    const scrollPrompt = document.querySelector('.scroll-prompt') as HTMLElement;
+    
+    // Calculate scroll progress (0 to 1)
+    const scrollProgress = Math.min(scrollY / windowHeight, 1);
+    
+    if (hero && heroInner && parallaxBg) {
+      // Fade out and move hero content
+      const opacity = 1 - scrollProgress * 1.5;
+      const translateY = scrollProgress * 100;
+      const scale = 1 - scrollProgress * 0.3;
+      
+      heroInner.style.opacity = Math.max(0, opacity).toString();
+      heroInner.style.transform = `translateY(-${translateY}px) scale(${scale})`;
+      
+      // Hide scroll prompt earlier
+      if (scrollPrompt) {
+        scrollPrompt.style.opacity = Math.max(0, 1 - scrollProgress * 2).toString();
+      }
+      
+      // Move background elements at different speeds (parallax)
+      floatingElements.forEach((elem, index) => {
+        const speed = 0.3 + (index * 0.15);
+        const moveY = scrollProgress * windowHeight * speed;
+        const rotate = scrollProgress * 90 * (index % 2 === 0 ? 1 : -1);
+        (elem as HTMLElement).style.transform = `translateY(${moveY}px) rotate(${rotate}deg)`;
+      });
+      
+      // Scale and blur background
+      const bgScale = 1 + scrollProgress * 0.5;
+      const bgBlur = scrollProgress * 20;
+      parallaxBg.style.transform = `scale(${bgScale})`;
+      parallaxBg.style.filter = `blur(${bgBlur}px)`;
+      parallaxBg.style.opacity = (1 - scrollProgress * 0.7).toString();
+      
+      // Hide hero completely when scrolled past
+      if (scrollProgress >= 0.95) {
+        hero.style.opacity = '0';
+        hero.style.pointerEvents = 'none';
+      } else {
+        hero.style.opacity = '1';
+        hero.style.pointerEvents = 'auto';
+      }
+    }
+    
+    // Show content only after hero transition is complete
+    if (content && scrollProgress >= 0.85 && !scrollThreshold) {
+      scrollThreshold = true;
+      setTimeout(() => {
+        content.classList.add('visible');
+      }, 200);
+    } else if (content && scrollProgress < 0.85 && scrollThreshold) {
+      scrollThreshold = false;
+      content.classList.remove('visible');
+    }
+    
+    ticking = false;
+  }
+  
+  function requestTick() {
+    if (!ticking) {
+      requestAnimationFrame(handleScroll);
+      ticking = true;
+    }
+  }
+  
+  window.addEventListener('scroll', requestTick);
+  
+  // Initial call
+  handleScroll();
+  
+  // Intersection Observer for sections
+  const sections = document.querySelectorAll('.portfolio-content section');
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    },
+    { threshold: 0.15, rootMargin: '0px 0px -100px 0px' }
+  );
+  
+  sections.forEach((section) => sectionObserver.observe(section));
+  
+  // Smooth scroll on prompt click
+  const scrollPrompt = document.querySelector('.scroll-prompt');
+  scrollPrompt?.addEventListener('click', () => {
+    window.scrollTo({
+      top: window.innerHeight,
+      behavior: 'smooth'
+    });
+  });
+</script>
