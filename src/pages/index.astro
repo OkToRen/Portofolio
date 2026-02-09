@@ -795,6 +795,34 @@ const skills = [
       font-size: 1rem;
       gap: 1rem;
     }
+
+    /* Hide most doodles on mobile - keep only 2-3 */
+    .doodle-1,
+    .doodle-3,
+    .doodle-4,
+    .doodle-6 {
+      display: none;
+    }
+
+    /* Make remaining doodles smaller and less intrusive */
+    .doodle-2,
+    .doodle-5,
+    .doodle-7 {
+      width: 80px;
+      height: 80px;
+      opacity: 0;
+      filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.15));
+    }
+
+    .doodle-2 {
+      width: 90px;
+      height: 90px;
+    }
+
+    .doodle-5 {
+      width: 100px;
+      height: 100px;
+    }
   }
 </style>
 
