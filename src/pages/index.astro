@@ -250,7 +250,7 @@ const skills = [
   <div class="portfolio-content" id="content">
 
   <!-- About Section -->
-  <section class="mb-24 pb-16 border-b border-border">
+  <section id="about" class="mb-24 pb-16 border-b border-border">
     <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">About</h2>
     <p class="text-muted leading-relaxed text-lg">
       Computer Science student and Laboratory Assistant with a strong passion for coding. 
@@ -261,7 +261,7 @@ const skills = [
   </section>
 
   <!-- Experience Section -->
-  <section class="mb-24 pb-16 border-b border-border">
+  <section id="experience" class="mb-24 pb-16 border-b border-border">
     <h2 class="text-primary font-bold mb-8 uppercase tracking-wider text-sm">Experience</h2>
     <div class="space-y-12">
       {experience.map((job) => (
@@ -283,7 +283,7 @@ const skills = [
   </section>
 
   <!-- Skills Section -->
-  <section class="mb-24 pb-16 border-b border-border">
+  <section id="skills" class="mb-24 pb-16 border-b border-border">
     <h2 class="text-primary font-bold mb-8 uppercase tracking-wider text-sm">Technical Stack</h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       {skills.map((skill) => (
@@ -332,6 +332,16 @@ const skills = [
 </Layout>
 
 <style>
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Custom smooth scrolling with easing */
+  * {
+    scroll-padding-top: 100px;
+  }
+
   /* Hero Wrapper */
   .hero-wrapper {
     position: relative;
@@ -765,7 +775,8 @@ const skills = [
     margin-top: 100vh;
     opacity: 0;
     transform: translateY(50px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
+    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
+                transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .portfolio-content.visible {
@@ -776,8 +787,9 @@ const skills = [
   /* Section animations */
   .portfolio-content section {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
+    transform: translateY(40px);
+    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   .portfolio-content section.visible {
@@ -827,6 +839,32 @@ const skills = [
 </style>
 
 <script>
+  // Smooth scroll with momentum and easing
+  let isScrolling = false;
+  let targetScroll = 0;
+  let currentScroll = 0;
+
+  // Enhanced smooth scroll for anchor links
+  document.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const link = target.closest('a[href^="#"]') as HTMLAnchorElement;
+    
+    if (link && link.hash) {
+      e.preventDefault();
+      const targetElement = document.querySelector(link.hash);
+      
+      if (targetElement) {
+        const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - 80;
+        
+        // Smooth scroll with custom easing
+        window.scrollTo({
+          top: targetPosition,
+          behavior: 'smooth'
+        });
+      }
+    }
+  });
+
   // Parallax scroll effect
   let ticking = false;
   let scrollThreshold = false;
@@ -909,20 +947,39 @@ const skills = [
   // Initial call
   handleScroll();
   
-  // Intersection Observer for sections
+  // Intersection Observer for sections with staggered animations
   const sections = document.querySelectorAll('.portfolio-content section');
   const sectionObserver = new IntersectionObserver(
     (entries) => {
-      entries.forEach((entry) => {
+      entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+          // Stagger the animation for a smoother effect
+          setTimeout(() => {
+            entry.target.classList.add('visible');
+          }, index * 100);
         }
       });
     },
-    { threshold: 0.15, rootMargin: '0px 0px -100px 0px' }
+    { 
+      threshold: 0.1, 
+      rootMargin: '0px 0px -50px 0px' 
+    }
   );
   
   sections.forEach((section) => sectionObserver.observe(section));
+  
+  // Enhanced smooth scrolling with momentum
+  let isWheelScrolling = false;
+  let wheelTimeout: number;
+
+  window.addEventListener('wheel', (e) => {
+    isWheelScrolling = true;
+    clearTimeout(wheelTimeout);
+    
+    wheelTimeout = window.setTimeout(() => {
+      isWheelScrolling = false;
+    }, 150);
+  }, { passive: true });
   
   // Smooth scroll on prompt click
   const scrollPrompt = document.querySelector('.scroll-prompt');
