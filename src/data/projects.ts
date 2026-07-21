@@ -123,7 +123,11 @@ export const projects: Project[] = [
       'Analytics derived on the fly from scraped jobs and tags',
       'Admin panel with data import and scraper control',
     ],
-    links: [],
+    links: [{ label: 'Live site', href: 'https://intern.darrenharyanto.com' }],
+    image: {
+      src: '/screenshots/hirescope.jpg',
+      alt: 'HireScope IT dashboard with a BINUS-style profile card and market hype predictions',
+    },
     documentation: [
       {
         heading: 'Overview',
@@ -177,32 +181,47 @@ export const projects: Project[] = [
   {
     slug: 'pdf-processor',
     name: 'pdf-Processor',
-    tagline: 'A tool for processing PDF documents: parsing, extracting, and transforming content.',
+    tagline: 'Brutalist browser-based tools for precise document surgery on PDFs.',
     summary:
-      'pdf-Processor is a utility for working with PDF documents programmatically. It reads them, pulls out their text and structured content, and transforms them into more useful formats.',
+      'PDF Modification Studio is a browser-based toolkit for editing PDFs. You drop files, run a transformation, and download the result instantly through a proxy-safe workflow designed for containerized deployment. Operations are grouped into categories, from everyday merging and page extraction to security, office conversion, AI, signing, and background removal.',
     year: '2026',
     role: 'Author',
-    status: 'Completed',
-    tech: ['PDF Parsing', 'Automation'],
+    status: 'Live',
+    tech: ['PDF Processing', 'Docker', 'Web App'],
     highlights: [
-      'Processes PDF documents programmatically',
-      'Extracts and transforms document content',
-      'Built as a reusable command-line and library tool',
+      'Drop files, transform, and download instantly in the browser',
+      'Dozens of operations across categories: merge, extract, security, office, AI, signing',
+      'Proxy-safe workflow built for containerized deployment',
+      'Live backend status indicator',
     ],
     links: [{ label: 'Live site', href: 'https://pdf.darrenharyanto.com' }],
+    image: {
+      src: '/screenshots/pdf-processor.jpg',
+      alt: 'PDF Modification Studio: brutalist tools for precise document surgery',
+    },
     documentation: [
       {
         heading: 'Overview',
         paragraphs: [
-          'pdf-Processor is a focused tool for handling PDF documents. It takes a PDF as input and processes it, extracting text and structured content and transforming documents as needed.',
+          'PDF Modification Studio is a browser-based tool for precise document work. You drop a file, pick an operation, run it, and download the result. Everything flows through a proxy-safe workflow built to run behind a reverse proxy in a containerized deployment, with a live backend status indicator on the page.',
         ],
       },
       {
-        heading: 'What it does',
+        heading: 'Operations',
+        paragraphs: ['The studio groups its tools into categories:'],
         bullets: [
-          'Reads and parses PDF files.',
-          'Extracts text and structured content from documents.',
-          'Transforms PDFs into more workable output formats.',
+          'Core: merge multiple PDFs into one ordered document, or extract a page range like 1,3-5,8.',
+          'Basic and Advanced editing for everyday and power-user changes.',
+          'Security: protect and restrict documents.',
+          'Prepare and Office: document preparation and conversions.',
+          'AI and Data: content-aware operations.',
+          'Sign, Remove Background, and more.',
+        ],
+      },
+      {
+        heading: 'Deployment',
+        paragraphs: [
+          'The app runs as a containerized service. Its workflow is proxy-safe, so file uploads and downloads work correctly behind a reverse proxy, and the page shows whether the backend is online.',
         ],
       },
     ],
