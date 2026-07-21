@@ -291,7 +291,7 @@ const { title } = Astro.props;
 	// Subtle pointer-driven tilt on cards marked [data-tilt].
 	if (!prefersReducedMotion) {
 		document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
-			const MAX = 4; // degrees — restrained on purpose
+			const MAX = 4; // degrees, restrained on purpose
 			card.addEventListener('pointermove', (e) => {
 				const r = card.getBoundingClientRect();
 				const px = (e.clientX - r.left) / r.width - 0.5;

@@ -12,7 +12,7 @@ export function getStaticPaths() {
 const { project } = Astro.props;
 ---
 
-<Layout title={`${project.name} — Darren Haryanto`}>
+<Layout title={`${project.name} | Darren Haryanto`}>
   <article>
     <a
       href="/projects"
@@ -55,6 +55,19 @@ const { project } = Astro.props;
         </div>
       )}
     </header>
+
+    {project.image && (
+      <figure class="mb-14">
+        <img
+          src={project.image.src}
+          alt={project.image.alt}
+          loading="lazy"
+          width="1568"
+          height="772"
+          class="w-full rounded-lg border border-border"
+        />
+      </figure>
+    )}
 
     <!-- Meta sidebar + summary -->
     <div class="grid md:grid-cols-3 gap-10 mb-14">

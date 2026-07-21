@@ -2,13 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import { projects } from '../data/projects';
 
-// Featured first, then the rest — both keep their declared order.
+// Featured first, then the rest, both keep their declared order.
 const sorted = [...projects].sort(
   (a, b) => Number(b.featured ?? false) - Number(a.featured ?? false)
 );
 ---
 
-<Layout title="Projects — Darren Haryanto">
+<Layout title="Projects | Darren Haryanto">
   <section class="mb-16">
     <a
       href="/#content"
@@ -22,7 +22,7 @@ const sorted = [...projects].sort(
 
     <h1 class="text-primary font-display font-medium text-5xl md:text-6xl tracking-tight mb-4">Projects<span class="text-accent">.</span></h1>
     <p class="text-muted leading-relaxed text-lg max-w-2xl">
-      A selection of things I've built — mobile apps, tooling, and the web. Click any project for
+      A selection of things I've built: mobile apps, tooling, and the web. Click any project for
       its full write-up.
     </p>
   </section>

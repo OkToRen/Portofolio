@@ -1,5 +1,5 @@
 /* Hallmark · macrostructure: Editorial redesign (IA preserved) · tone: elegant/editorial · anchor hue: cool-blue 258
- * theme: Refined Editorial — Fraunces display + Inter Tight body + JetBrains Mono labels
+ * theme: Refined Editorial,Fraunces display + Inter Tight body + JetBrains Mono labels
  * paper: dark oklch(0.16) / light oklch(0.985) · accent: oklch(0.64 0.17 258)
  * pre-emit critique: P5 H4 E4 S5 R5 V4
  */
@@ -10,7 +10,7 @@
   --font-sans: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
-  /* Dark mode (default) — cool-neutral paper, blue accent */
+  /* Dark mode (default),cool-neutral paper, blue accent */
   --color-background: oklch(0.16 0.004 285);
   --color-surface: oklch(0.215 0.005 285);
   --color-primary: oklch(0.90 0.004 285);
@@ -39,7 +39,7 @@
 /* Base ------------------------------------------------------------------ */
 html,
 body {
-  overflow-x: clip; /* never hidden — gate 34 */
+  overflow-x: clip; /* never hidden,gate 34 */
 }
 
 h1,
@@ -49,7 +49,7 @@ h3 {
   min-width: 0;
 }
 
-/* Fine film grain — global, subtle, non-interactive. A single 'wow' texture
+/* Fine film grain,global, subtle, non-interactive. A single 'wow' texture
    that reads as paper, not decoration. */
 body::before {
   content: "";
@@ -66,7 +66,7 @@ body::before {
   opacity: 0.02;
 }
 
-/* Tilt cards — subtle perspective response on pointer, transform driven by JS.
+/* Tilt cards,subtle perspective response on pointer, transform driven by JS.
    Collapses to nothing under reduced-motion. */
 [data-tilt] {
   transform-style: preserve-3d;
@@ -75,7 +75,7 @@ body::before {
   will-change: transform;
 }
 
-/* Scroll reveal — opacity + lift, staggered via inline transition-delay in JS. */
+/* Scroll reveal,opacity + lift, staggered via inline transition-delay in JS. */
 [data-reveal] {
   opacity: 0;
   transform: translateY(18px);
