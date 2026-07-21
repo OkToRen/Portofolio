@@ -334,6 +334,11 @@ const { title } = Astro.props;
 		const ring = document.querySelector<HTMLElement>('.cursor-ring');
 		const glow = document.querySelector<HTMLElement>('.cursor-spotlight');
 		const magnets = Array.from(document.querySelectorAll<HTMLElement>('[data-magnetic]'));
+		// The glow shows across the whole content field (margins included),
+		// not just the centred text column — so gate on "past the hero"
+		// rather than on the element under the pointer. Pages with no hero
+		// (projects list/detail) are content top-to-bottom, so always on.
+		const heroWrapper = document.querySelector('.hero-wrapper');
 
 		let pointerX = window.innerWidth / 2;
 		let pointerY = window.innerHeight / 2;
@@ -368,9 +373,10 @@ const { title } = Astro.props;
 					ring.classList.toggle('is-interactive', !!interactive);
 				}
 
-				// 5 · glow — only across the portfolio content, never the hero
+				// 5 · glow — across the content field, hidden while over the hero
 				if (glow) {
-					glow.classList.toggle('is-visible', !!el.closest('#content'));
+					const pastHero = !heroWrapper || window.scrollY > window.innerHeight * 0.6;
+					glow.classList.toggle('is-visible', pastHero);
 				}
 
 				// 6 · magnetic pull within proximity
