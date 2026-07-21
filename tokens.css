@@ -1,0 +1,32 @@
+/* Hallmark · Refined Editorial — portable design tokens
+ * Fraunces (display) + Inter Tight (body) + JetBrains Mono (labels)
+ * Copy this file into a new project to carry the system forward.
+ */
+:root {
+  /* Type */
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Color — dark (default) */
+  --color-background: oklch(0.16 0.004 285);
+  --color-surface: oklch(0.215 0.005 285);
+  --color-primary: oklch(0.9 0.004 285);
+  --color-accent: oklch(0.64 0.17 258);
+  --color-muted: oklch(0.62 0.012 285);
+  --color-border: oklch(0.3 0.006 285);
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Color — light */
+.light {
+  --color-background: oklch(0.985 0.002 285);
+  --color-surface: oklch(0.965 0.004 285);
+  --color-primary: oklch(0.26 0.006 285);
+  --color-accent: oklch(0.55 0.2 262);
+  --color-muted: oklch(0.5 0.01 285);
+  --color-border: oklch(0.91 0.004 285);
+}

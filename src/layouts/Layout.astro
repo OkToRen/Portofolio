@@ -16,9 +16,15 @@ const { title } = Astro.props;
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+			rel="stylesheet"
+		/>
 		<title>{title}</title>
 	</head>
-	<body class="bg-background text-primary font-mono antialiased selection:bg-accent selection:text-white transition-colors duration-300">
+	<body class="bg-background text-primary font-sans antialiased selection:bg-accent selection:text-white transition-colors duration-300">
 		<div class="fixed top-6 right-6 flex gap-3 z-50">
 			<!-- Collapsible Menu Button -->
 			<div class="relative">
@@ -278,6 +284,44 @@ const { title } = Astro.props;
 			}
 		});
 	});
+
+	// Respect the user's motion preference for all decorative interactions.
+	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	// Subtle pointer-driven tilt on cards marked [data-tilt].
+	if (!prefersReducedMotion) {
+		document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
+			const MAX = 4; // degrees — restrained on purpose
+			card.addEventListener('pointermove', (e) => {
+				const r = card.getBoundingClientRect();
+				const px = (e.clientX - r.left) / r.width - 0.5;
+				const py = (e.clientY - r.top) / r.height - 0.5;
+				card.style.transform = `perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateY(-4px)`;
+			});
+			card.addEventListener('pointerleave', () => {
+				card.style.transform = '';
+			});
+		});
+	}
+
+	// Staggered scroll reveal for elements marked [data-reveal].
+	const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
+	if (revealEls.length) {
+		const revealObserver = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry, i) => {
+					if (entry.isIntersecting) {
+						const el = entry.target as HTMLElement;
+						el.style.transitionDelay = `${Math.min(i * 60, 240)}ms`;
+						el.classList.add('is-visible');
+						revealObserver.unobserve(el);
+					}
+				});
+			},
+			{ threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+		);
+		revealEls.forEach((el) => revealObserver.observe(el));
+	}
 </script>
 
 <style is:global>

@@ -1,0 +1,31 @@
+# Gitea Actions workflow — deploys the site on the self-hosted server with
+# Docker Compose. On every push to main it rebuilds the image and (re)starts
+# the `portfolio` container, which nginx serves on port 5173.
+#
+# REQUIREMENTS on the runner (one-time):
+#   - the Docker CLI + Compose plugin available inside the job, and
+#   - access to the host Docker daemon (the act_runner must mount
+#     /var/run/docker.sock into the job container, or run this job on a
+#     host-level runner label).
+# The build context is streamed to the daemon, so `--build` works over the
+# mounted socket; the published 5173 port binds on the host.
+
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build image & (re)start container
+        run: docker compose up -d --build
+
+      - name: Prune dangling build layers
+        run: docker image prune -f
