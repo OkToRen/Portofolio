@@ -56,19 +56,6 @@ const { project } = Astro.props;
       )}
     </header>
 
-    {project.image && (
-      <figure class="mb-14">
-        <img
-          src={project.image.src}
-          alt={project.image.alt}
-          loading="lazy"
-          width="1568"
-          height="772"
-          class="w-full rounded-lg border border-border"
-        />
-      </figure>
-    )}
-
     <!-- Meta sidebar + summary -->
     <div class="grid md:grid-cols-3 gap-10 mb-14">
       <aside class="md:col-span-1 space-y-6">
@@ -109,6 +96,26 @@ const { project } = Astro.props;
         <p class="text-primary text-lg leading-relaxed">{project.summary}</p>
       </div>
     </div>
+
+    <!-- Gallery -->
+    {project.images && project.images.length > 0 && (
+      <section class="mb-14">
+        <h2 class="text-muted font-bold uppercase tracking-wider text-xs mb-5">Gallery</h2>
+        <div class="columns-2 md:columns-3 gap-4">
+          {project.images.map((img) => (
+            <figure class="mb-4 break-inside-avoid">
+              <img
+                src={img.src}
+                alt={img.alt}
+                loading="lazy"
+                data-lightbox
+                class="w-full rounded-lg border border-border cursor-zoom-in transition-transform duration-300 hover:-translate-y-0.5 hover:border-accent"
+              />
+            </figure>
+          ))}
+        </div>
+      </section>
+    )}
 
     <!-- Documentation -->
     <div class="space-y-12">

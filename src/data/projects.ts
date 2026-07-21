@@ -36,8 +36,8 @@ export interface Project {
   highlights: string[];
   /** External links (repo, live site, landing page). */
   links: ProjectLink[];
-  /** Optional screenshot shown on the detail page. */
-  image?: { src: string; alt: string };
+  /** Optional screenshot gallery shown on the detail page. */
+  images?: { src: string; alt: string }[];
   /** Full write-up, rendered section by section. */
   documentation: DocSection[];
 }
@@ -64,10 +64,20 @@ export const projects: Project[] = [
       { label: 'Live landing page', href: 'https://lively.darrenharyanto.com' },
       { label: 'LivelyHub on GitHub', href: 'https://github.com/LivelyHub' },
     ],
-    image: {
-      src: '/screenshots/lively.jpg',
-      alt: 'Lively landing page: five minutes of strength, sent as a text',
-    },
+    images: [
+      { src: '/screenshots/lively/00-landing.jpg', alt: 'Lively landing page: five minutes of strength, sent as a text' },
+      { src: '/screenshots/lively/01-setup-elder.png', alt: 'Family app: setting up the elder profile' },
+      { src: '/screenshots/lively/02-setup-persona.png', alt: 'Family app: choosing the companion persona' },
+      { src: '/screenshots/lively/03-setup-health.png', alt: 'Family app: setting health flags' },
+      { src: '/screenshots/lively/04-setup-personalize.png', alt: 'Family app: personalizing the daily routine' },
+      { src: '/screenshots/lively/05-home.png', alt: 'Family app: home screen' },
+      { src: '/screenshots/lively/06-chat.png', alt: 'Family app: read-only chat monitor' },
+      { src: '/screenshots/lively/07-progress.png', alt: 'Family app: progress charts' },
+      { src: '/screenshots/lively/08-alerts.png', alt: 'Family app: alerts' },
+      { src: '/screenshots/lively/09-whatsapp-chat-1.png', alt: 'WhatsApp conversation with the elder (1 of 3)' },
+      { src: '/screenshots/lively/10-whatsapp-chat-2.png', alt: 'WhatsApp conversation with the elder (2 of 3)' },
+      { src: '/screenshots/lively/11-whatsapp-chat-3.png', alt: 'WhatsApp conversation with the elder (3 of 3)' },
+    ],
     documentation: [
       {
         heading: 'Overview',
@@ -124,10 +134,11 @@ export const projects: Project[] = [
       'Admin panel with data import and scraper control',
     ],
     links: [{ label: 'Live site', href: 'https://intern.darrenharyanto.com' }],
-    image: {
-      src: '/screenshots/hirescope.jpg',
-      alt: 'HireScope IT dashboard with a BINUS-style profile card and market hype predictions',
-    },
+    images: [
+      { src: '/screenshots/hirescope/01-dashboard.jpg', alt: 'HireScope dashboard with a BINUS-style profile card and market hype predictions' },
+      { src: '/screenshots/hirescope/02-job-board.jpg', alt: 'HireScope job board with filters and a requested-skills chart' },
+      { src: '/screenshots/hirescope/03-market-insights.jpg', alt: 'HireScope market insights: hype trend, company types, salary distribution' },
+    ],
     documentation: [
       {
         heading: 'Overview',
@@ -195,10 +206,10 @@ export const projects: Project[] = [
       'Live backend status indicator',
     ],
     links: [{ label: 'Live site', href: 'https://pdf.darrenharyanto.com' }],
-    image: {
-      src: '/screenshots/pdf-processor.jpg',
-      alt: 'PDF Modification Studio: brutalist tools for precise document surgery',
-    },
+    images: [
+      { src: '/screenshots/pdf-processor/01-studio.jpg', alt: 'PDF Modification Studio home with operation categories' },
+      { src: '/screenshots/pdf-processor/02-operations.jpg', alt: 'Merge and extract operations with live previews' },
+    ],
     documentation: [
       {
         heading: 'Overview',
@@ -245,6 +256,11 @@ export const projects: Project[] = [
     links: [
       { label: 'Live site', href: 'https://darrenharyanto.com' },
       { label: 'GitHub', href: 'https://github.com/OkToRen/portofolio' },
+    ],
+    images: [
+      { src: '/screenshots/portfolio/01-home.jpg', alt: 'Portfolio home hero' },
+      { src: '/screenshots/portfolio/02-projects.jpg', alt: 'Projects listing in dark mode' },
+      { src: '/screenshots/portfolio/03-projects-light.jpg', alt: 'Projects listing in light mode' },
     ],
     documentation: [
       {

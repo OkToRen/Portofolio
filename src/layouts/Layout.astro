@@ -106,6 +106,15 @@ const { title } = Astro.props;
 		<main class="max-w-4xl mx-auto px-6 py-20">
 			<slot />
 		</main>
+
+		<!-- Lightbox overlay for screenshot galleries -->
+		<div
+			id="lightbox"
+			class="fixed inset-0 z-[9998] hidden items-center justify-center bg-background/95 backdrop-blur-sm p-6 cursor-zoom-out"
+			aria-hidden="true"
+		>
+			<img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[92vw] rounded-lg border border-border object-contain" />
+		</div>
 	</body>
 </html>
 
@@ -321,6 +330,32 @@ const { title } = Astro.props;
 			{ threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
 		);
 		revealEls.forEach((el) => revealObserver.observe(el));
+	}
+
+	// Lightbox for screenshot galleries.
+	const lightbox = document.getElementById('lightbox');
+	const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
+	if (lightbox && lightboxImg) {
+		const openLightbox = (src: string, alt: string) => {
+			lightboxImg.src = src;
+			lightboxImg.alt = alt;
+			lightbox.classList.remove('hidden');
+			lightbox.classList.add('flex');
+			lightbox.setAttribute('aria-hidden', 'false');
+		};
+		const closeLightbox = () => {
+			lightbox.classList.add('hidden');
+			lightbox.classList.remove('flex');
+			lightbox.setAttribute('aria-hidden', 'true');
+			lightboxImg.removeAttribute('src');
+		};
+		document.querySelectorAll<HTMLImageElement>('img[data-lightbox]').forEach((img) => {
+			img.addEventListener('click', () => openLightbox(img.currentSrc || img.src, img.alt));
+		});
+		lightbox.addEventListener('click', closeLightbox);
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) closeLightbox();
+		});
 	}
 </script>
 
