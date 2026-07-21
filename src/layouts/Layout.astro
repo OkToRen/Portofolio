@@ -28,7 +28,7 @@ const { title } = Astro.props;
 		<div class="fixed top-6 right-6 flex gap-3 z-50">
 			<!-- Collapsible Menu Button -->
 			<div class="relative">
-				<button id="menu-toggle" class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-all" aria-label="Toggle menu">
+				<button id="menu-toggle" data-magnetic class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-all" aria-label="Toggle menu">
 					<svg id="menu-icon-open" class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
 					</svg>
@@ -84,9 +84,10 @@ const { title } = Astro.props;
 				</div>
 			</div>
 			
-			<a href="/cv.pdf" download="Darren_Haryanto_CV.pdf" 
-			   id="cv-download" 
-			   class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-all flex items-center gap-2 text-sm font-medium text-primary hover:text-accent" 
+			<a href="/cv.pdf" download="Darren_Haryanto_CV.pdf"
+			   id="cv-download"
+			   data-magnetic
+			   class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-all flex items-center gap-2 text-sm font-medium text-primary hover:text-accent"
 			   aria-label="Download CV">
 				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -94,7 +95,7 @@ const { title } = Astro.props;
 				<span class="hidden sm:inline">CV</span>
 			</a>
 			
-			<button id="theme-toggle" class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-all" aria-label="Toggle theme">
+			<button id="theme-toggle" data-magnetic class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-all" aria-label="Toggle theme">
 				<svg id="theme-icon-dark" class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
 				</svg>
@@ -106,6 +107,10 @@ const { title } = Astro.props;
 		<main class="max-w-4xl mx-auto px-6 py-20">
 			<slot />
 		</main>
+
+		<!-- Pointer-effect layers (fine pointer only; styled in global.css) -->
+		<div class="cursor-spotlight" aria-hidden="true"></div>
+		<div class="cursor-ring" aria-hidden="true"><span class="cursor-ring__inner"></span></div>
 
 		<!-- Lightbox overlay for screenshot galleries -->
 		<div
@@ -317,6 +322,80 @@ const { title } = Astro.props;
 				card.style.transform = '';
 			});
 		});
+	}
+
+	// Pointer effects (fine pointer + motion-allowed only):
+	//   4 · ring follows the cursor, reacts over interactive elements
+	//   5 · faint glow pools under the pointer across #content only
+	//   6 · control-cluster buttons lean toward the pointer
+	const finePointer = window.matchMedia('(pointer: fine)').matches;
+
+	if (finePointer && !prefersReducedMotion) {
+		const ring = document.querySelector<HTMLElement>('.cursor-ring');
+		const glow = document.querySelector<HTMLElement>('.cursor-spotlight');
+		const magnets = Array.from(document.querySelectorAll<HTMLElement>('[data-magnetic]'));
+
+		let pointerX = window.innerWidth / 2;
+		let pointerY = window.innerHeight / 2;
+		let ringX = pointerX;
+		let ringY = pointerY;
+		let glowX = pointerX;
+		let glowY = pointerY;
+
+		const frame = () => {
+			// Ring eases quickly; glow trails a touch slower for a liquid feel.
+			ringX += (pointerX - ringX) * 0.2;
+			ringY += (pointerY - ringY) * 0.2;
+			glowX += (pointerX - glowX) * 0.12;
+			glowY += (pointerY - glowY) * 0.12;
+			if (ring) ring.style.transform = `translate(${ringX}px, ${ringY}px)`;
+			if (glow) glow.style.transform = `translate(${glowX}px, ${glowY}px)`;
+			requestAnimationFrame(frame);
+		};
+
+		window.addEventListener(
+			'pointermove',
+			(e) => {
+				if (e.pointerType !== 'mouse') return;
+				pointerX = e.clientX;
+				pointerY = e.clientY;
+				const el = e.target as HTMLElement;
+
+				// 4 · ring — visible on move, accent + grown over interactive els
+				if (ring) {
+					ring.classList.add('is-visible');
+					const interactive = el.closest('a, button, [data-tilt], input, label, [role="button"]');
+					ring.classList.toggle('is-interactive', !!interactive);
+				}
+
+				// 5 · glow — only across the portfolio content, never the hero
+				if (glow) {
+					glow.classList.toggle('is-visible', !!el.closest('#content'));
+				}
+
+				// 6 · magnetic pull within proximity
+				for (const magnet of magnets) {
+					const r = magnet.getBoundingClientRect();
+					const dx = e.clientX - (r.left + r.width / 2);
+					const dy = e.clientY - (r.top + r.height / 2);
+					const radius = Math.max(r.width, r.height) / 2 + 36;
+					if (Math.hypot(dx, dy) < radius) {
+						magnet.style.transform = `translate(${(dx * 0.28).toFixed(2)}px, ${(dy * 0.28).toFixed(2)}px)`;
+					} else if (magnet.style.transform) {
+						magnet.style.transform = '';
+					}
+				}
+			},
+			{ passive: true }
+		);
+
+		document.addEventListener('pointerleave', () => {
+			ring?.classList.remove('is-visible');
+			glow?.classList.remove('is-visible');
+			for (const magnet of magnets) magnet.style.transform = '';
+		});
+
+		requestAnimationFrame(frame);
 	}
 
 	// Staggered scroll reveal for elements marked [data-reveal].

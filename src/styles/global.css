@@ -97,3 +97,105 @@ body::before {
     transition: none;
   }
 }
+
+/* ------------------------------------------------------------------ *
+ * Pointer effects — three restrained, cooperating layers. All are
+ * fine-pointer only and fully removed under reduced-motion / touch.
+ *   4 · cursor ring   — soft ring easing behind the native cursor;
+ *                       accent-tinted + grown over interactive things.
+ *   5 · content glow  — faint accent pool following the pointer, only
+ *                       across the flat content sections (not the hero).
+ *   6 · magnetic pull — control-cluster buttons lean toward the pointer.
+ * Position is JS-driven (transform); state changes animate scale /
+ * colour / opacity only. Nothing here animates layout.
+ * ------------------------------------------------------------------ */
+
+/* 4 · Follower ring — the native cursor stays; this only augments it. */
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  margin: -15px 0 0 -15px; /* static centring on the translate point */
+  z-index: 9997; /* under film grain (9999) + lightbox (9998) */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s var(--ease-out);
+  will-change: transform;
+}
+
+.cursor-ring.is-visible {
+  opacity: 1;
+}
+
+.cursor-ring__inner {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid var(--color-muted);
+  border-radius: 50%;
+  opacity: 0.5;
+  transform: scale(0.85);
+  transition: transform 0.28s var(--ease-out), border-color 0.28s var(--ease-out),
+    opacity 0.28s var(--ease-out);
+}
+
+.cursor-ring.is-interactive .cursor-ring__inner {
+  transform: scale(1.5);
+  border-color: var(--color-accent);
+  opacity: 0.9;
+}
+
+/* 5 · Content-only glow — screen-blends a dim accent pool onto the dark
+   paper; multiply in light mode so it still reads faintly. */
+.cursor-spotlight {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 480px;
+  height: 480px;
+  margin: -240px 0 0 -240px;
+  z-index: 9996;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle closest-side, var(--color-accent) 0%, transparent 70%);
+  filter: blur(30px);
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease-out);
+  will-change: transform;
+}
+
+.cursor-spotlight.is-visible {
+  opacity: 0.14;
+}
+
+.light .cursor-spotlight {
+  mix-blend-mode: multiply;
+}
+
+.light .cursor-spotlight.is-visible {
+  opacity: 0.1;
+}
+
+/* 6 · Magnetic controls — pull is JS-driven; the buttons' existing
+   transition eases the return. */
+[data-magnetic] {
+  will-change: transform;
+}
+
+/* Fine-pointer only; nothing decorative for touch or reduced-motion. */
+@media (hover: none), (pointer: coarse) {
+  .cursor-ring,
+  .cursor-spotlight {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-ring,
+  .cursor-spotlight {
+    display: none;
+  }
+}
