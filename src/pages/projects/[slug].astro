@@ -97,19 +97,22 @@ const { project } = Astro.props;
       </div>
     </div>
 
-    <!-- Gallery -->
+    <!-- Hallmark · component: gallery (filmstrip) · genre: editorial · compact horizontal scroll -->
     {project.images && project.images.length > 0 && (
       <section class="mb-14">
-        <h2 class="text-muted font-bold uppercase tracking-wider text-xs mb-5">Gallery</h2>
-        <div class="columns-2 md:columns-3 gap-4">
+        <div class="flex items-baseline justify-between mb-4">
+          <h2 class="text-muted font-bold uppercase tracking-wider text-xs">Gallery</h2>
+          <span class="text-xs text-muted font-mono">{project.images.length} screenshots</span>
+        </div>
+        <div class="flex gap-3 overflow-x-auto pb-3 [scrollbar-width:thin] [scrollbar-color:var(--color-border)_transparent]">
           {project.images.map((img) => (
-            <figure class="mb-4 break-inside-avoid">
+            <figure class="shrink-0">
               <img
                 src={img.src}
                 alt={img.alt}
                 loading="lazy"
                 data-lightbox
-                class="w-full rounded-lg border border-border cursor-zoom-in transition-transform duration-300 hover:-translate-y-0.5 hover:border-accent"
+                class="h-32 sm:h-40 w-auto rounded-lg border border-border cursor-zoom-in transition duration-300 hover:-translate-y-0.5 hover:border-accent"
               />
             </figure>
           ))}
