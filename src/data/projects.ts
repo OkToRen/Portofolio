@@ -50,7 +50,7 @@ export const projects: Project[] = [
     summary:
       'Lively coaches Indonesian elders through a short daily strength routine over WhatsApp, the app they already open every day. There is no install, no account, and no new interface to learn. Behind the friendly chat, every check-in is quietly measured so family can follow along from a companion mobile app. Built for Garuda Hacks 7.0 on the Health track.',
     year: '2026',
-    role: 'Full-stack Developer',
+    role: 'Backend, Bot & Landing Developer',
     status: 'Live',
     featured: true,
     tech: ['Expo (React Native)', 'TypeScript', 'Fastify', 'PostgreSQL', 'WhatsApp Cloud API', 'OpenAI'],
@@ -111,7 +111,7 @@ export const projects: Project[] = [
       {
         heading: 'My role',
         paragraphs: [
-          'I worked across the stack: the Expo family app, the Fastify backend, and the WhatsApp and bot integration that ties the daily coaching together.',
+          'I built the Fastify backend, the bot, and the WhatsApp integration through Meta for Developers, and shaped the flow of the daily coaching conversation. I also developed the Lively landing page.',
         ],
       },
     ],
@@ -123,7 +123,7 @@ export const projects: Project[] = [
     summary:
       'HireScope (branded HireScope IT) is a Next.js web app that turns scraped IT job listings into a career-intelligence dashboard for Indonesia. It pairs a job board with data-driven analytics on skills, salaries, company types, and trending roles. The interface deliberately mirrors a BINUS university portal, so it reads like a campus-oriented job platform.',
     year: '2026',
-    role: 'Full-stack Developer',
+    role: 'Frontend, Database & Deployment',
     status: 'In Development',
     featured: true,
     tech: ['Next.js 16', 'React 19', 'Tailwind CSS 4', 'Drizzle ORM', 'PostgreSQL', 'Recharts'],
@@ -196,7 +196,7 @@ export const projects: Project[] = [
     summary:
       'PDF Modification Studio is a browser-based toolkit for editing PDFs. You drop files, run a transformation, and download the result instantly through a proxy-safe workflow designed for containerized deployment. Operations are grouped into categories, from everyday merging and page extraction to security, office conversion, AI, signing, and background removal.',
     year: '2026',
-    role: 'Author',
+    role: 'Solo Developer',
     status: 'Live',
     tech: ['PDF Processing', 'Docker', 'Web App'],
     highlights: [

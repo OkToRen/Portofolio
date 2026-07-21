@@ -14,7 +14,7 @@ const personal = {
   contact: {
     email: "darrenharyanto@gmail.com",
     linkedin: "www.linkedin.com/in/darren-haryanto-164841264",
-    phone: "+62 811-1777-566" 
+    github: "github.com/OkToRen"
   }
 };
 
@@ -233,7 +233,9 @@ const skills = [
               LinkedIn
             </a>
             <span class="divider">/</span>
-            <span class="hero-phone">{personal.contact.phone}</span>
+            <a href={`https://${personal.contact.github}`} target="_blank" class="hero-link">
+              GitHub
+            </a>
           </div>
         </div>
         
@@ -319,6 +321,7 @@ const skills = [
             <h3 class="text-primary font-display font-medium text-xl group-hover:text-accent transition-colors">{project.name}</h3>
             <span class="shrink-0 text-[10px] uppercase tracking-wider text-accent bg-accent/10 px-2.5 py-1 rounded-full font-semibold">{project.status}</span>
           </div>
+          <p class="text-xs font-mono text-accent mb-3">{project.role}</p>
           <p class="text-muted text-sm leading-relaxed mb-5 flex-1">{project.tagline}</p>
           <div class="flex flex-wrap gap-2">
             {project.tech.slice(0, 4).map((tag) => (
