@@ -1,0 +1,123 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { projects } from '../../data/projects';
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+---
+
+<Layout title={`${project.name} — Darren Haryanto`}>
+  <article>
+    <a
+      href="/projects"
+      class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors mb-10"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      All projects
+    </a>
+
+    <!-- Header -->
+    <header class="mb-12 pb-10 border-b border-border">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="text-[10px] uppercase tracking-wider text-accent bg-accent/10 px-2.5 py-1 rounded-full font-semibold">
+          {project.status}
+        </span>
+        <span class="text-xs text-muted font-mono">{project.year}</span>
+      </div>
+
+      <h1 class="text-primary font-bold text-4xl md:text-5xl tracking-tight mb-4">{project.name}</h1>
+      <p class="text-muted text-lg leading-relaxed max-w-2xl">{project.tagline}</p>
+
+      {project.links.length > 0 && (
+        <div class="flex flex-wrap gap-3 mt-8">
+          {project.links.map((link) => (
+            <a
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center gap-2 bg-surface border border-border hover:border-accent text-primary hover:text-accent text-sm font-medium px-4 py-2 rounded-lg transition-all"
+            >
+              {link.label}
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h10v10"></path>
+              </svg>
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <!-- Meta sidebar + summary -->
+    <div class="grid md:grid-cols-3 gap-10 mb-14">
+      <aside class="md:col-span-1 space-y-6">
+        <div>
+          <h2 class="text-muted font-bold uppercase tracking-wider text-xs mb-2">Role</h2>
+          <p class="text-primary text-sm">{project.role}</p>
+        </div>
+
+        {project.tech.length > 0 && (
+          <div>
+            <h2 class="text-muted font-bold uppercase tracking-wider text-xs mb-3">Tech Stack</h2>
+            <div class="flex flex-wrap gap-2">
+              {project.tech.map((tag) => (
+                <span class="text-xs text-primary font-mono bg-surface border border-border rounded-full px-2.5 py-1">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {project.highlights.length > 0 && (
+          <div>
+            <h2 class="text-muted font-bold uppercase tracking-wider text-xs mb-3">Highlights</h2>
+            <ul class="space-y-2">
+              {project.highlights.map((item) => (
+                <li class="flex gap-2 text-sm text-muted leading-relaxed">
+                  <span class="text-accent mt-0.5">▸</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </aside>
+
+      <div class="md:col-span-2">
+        <p class="text-primary text-lg leading-relaxed">{project.summary}</p>
+      </div>
+    </div>
+
+    <!-- Documentation -->
+    <div class="space-y-12">
+      {project.documentation.map((section) => (
+        <section>
+          <h2 class="text-primary font-bold text-2xl tracking-tight mb-5">{section.heading}</h2>
+          {section.paragraphs?.map((para) => (
+            <p class="text-muted leading-relaxed text-base mb-4">{para}</p>
+          ))}
+          {section.bullets && (
+            <ul class="list-disc list-outside pl-5 space-y-2 text-muted leading-relaxed">
+              {section.bullets.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+        </section>
+      ))}
+    </div>
+
+    <footer class="text-center text-sm text-muted pt-16 mt-16 border-t border-border">
+      <a href="/projects" class="text-accent hover:underline">← Back to all projects</a>
+    </footer>
+  </article>
+</Layout>

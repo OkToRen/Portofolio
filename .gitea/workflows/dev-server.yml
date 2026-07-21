@@ -1,0 +1,33 @@
+# Gitea Actions workflow — runs the Astro dev server on a self-hosted runner,
+# bound to port 5173 and reachable on the network.
+#
+# Requires a Gitea Actions runner registered with the `self-hosted` label.
+# Note: the dev server is long-running — this job stays "running" until the
+# server is stopped (that's expected for a serve job, not a build job).
+
+name: Dev Server
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: # allow manual runs from the Gitea Actions UI
+
+jobs:
+  dev:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start dev server on port 5173
+        # `--` forwards the flags to `astro dev`; --host exposes it beyond localhost.
+        run: npm run dev -- --host 0.0.0.0 --port 5173
