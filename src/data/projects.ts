@@ -258,9 +258,15 @@ export const projects: Project[] = [
       { label: 'GitHub', href: 'https://github.com/OkToRen/portofolio' },
     ],
     images: [
-      { src: '/screenshots/portfolio/01-home.jpg', alt: 'Portfolio home hero' },
-      { src: '/screenshots/portfolio/02-projects.jpg', alt: 'Projects listing in dark mode' },
-      { src: '/screenshots/portfolio/03-projects-light.jpg', alt: 'Projects listing in light mode' },
+      { src: '/screenshots/portfolio/01-hero-dark.jpg', alt: 'Home hero in dark mode: the name set in Fraunces over a soft gradient field' },
+      { src: '/screenshots/portfolio/02-hero-light.jpg', alt: 'Home hero in light mode' },
+      { src: '/screenshots/portfolio/03-home-experience.jpg', alt: 'About paragraph and the Experience timeline' },
+      { src: '/screenshots/portfolio/04-home-stack-projects.jpg', alt: 'Technical Stack grid and Selected Projects cards with role labels' },
+      { src: '/screenshots/portfolio/05-home-education.jpg', alt: 'Education and Organization panels above the footer' },
+      { src: '/screenshots/portfolio/06-projects-dark.jpg', alt: 'Projects listing page in dark mode: four project cards' },
+      { src: '/screenshots/portfolio/07-projects-light.jpg', alt: 'Projects listing page in light mode' },
+      { src: '/screenshots/portfolio/08-project-detail.jpg', alt: 'A project detail page: role, tech stack, and highlights' },
+      { src: '/screenshots/portfolio/09-project-docs.jpg', alt: 'Project documentation sections with the screenshot filmstrip' },
     ],
     documentation: [
       {
@@ -283,8 +289,18 @@ export const projects: Project[] = [
         bullets: [
           'Light and dark themes with a circular-reveal transition powered by the View Transitions API.',
           'A refined editorial type system pairing Fraunces with Inter Tight, over a subtle film-grain texture.',
+          'Restrained pointer effects — a follower ring, a content-only glow, and magnetic controls — all disabled on touch and under reduced-motion.',
           'Smooth, eased anchor scrolling and staggered reveals.',
           'A data-driven projects system where everything comes from a single typed data file.',
+        ],
+      },
+      {
+        heading: 'Pages',
+        paragraphs: ['The site is three page types, all sharing one layout, type system, and theme:'],
+        bullets: [
+          'Home: a full-screen parallax hero (name, role, and Email / LinkedIn / GitHub links) that fades on scroll into the content — About, an Experience timeline, a Technical Stack grid, Selected Projects, and Education & Organization panels.',
+          'Projects listing: a two-column grid of project cards, each showing its status, my role, tagline, and stack.',
+          'Project detail: a documentation page per project — overview, role, tech stack, highlights, a screenshot filmstrip with a lightbox, and a section-by-section write-up.',
         ],
       },
     ],
