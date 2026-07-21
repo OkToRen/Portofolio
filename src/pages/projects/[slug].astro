@@ -104,18 +104,40 @@ const { project } = Astro.props;
           <h2 class="text-muted font-bold uppercase tracking-wider text-xs">Gallery</h2>
           <span class="text-xs text-muted font-mono">{project.images.length} screenshots</span>
         </div>
-        <div class="flex gap-3 overflow-x-auto pb-3 [scrollbar-width:thin] [scrollbar-color:var(--color-border)_transparent]">
-          {project.images.map((img) => (
-            <figure class="shrink-0">
-              <img
-                src={img.src}
-                alt={img.alt}
-                loading="lazy"
-                data-lightbox
-                class="h-32 sm:h-40 w-auto rounded-lg border border-border cursor-zoom-in transition duration-300 hover:-translate-y-0.5 hover:border-accent"
-              />
-            </figure>
-          ))}
+        <div class="relative group/gallery">
+          <div
+            id="gallery-strip"
+            class="flex gap-3 overflow-x-auto scroll-smooth pb-3 snap-x [scrollbar-width:thin] [scrollbar-color:var(--color-border)_transparent]"
+          >
+            {project.images.map((img) => (
+              <figure class="shrink-0 snap-start">
+                <img
+                  src={img.src}
+                  alt={img.alt}
+                  loading="lazy"
+                  data-lightbox
+                  class="h-32 sm:h-40 w-auto rounded-lg border border-border cursor-zoom-in transition duration-300 hover:-translate-y-0.5 hover:border-accent"
+                />
+              </figure>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            id="gallery-prev"
+            aria-label="Scroll to previous screenshots"
+            class="hidden sm:flex absolute left-1 top-1/2 -mt-1.5 -translate-y-1/2 z-10 h-9 w-9 items-center justify-center rounded-full bg-surface/90 border border-border text-primary backdrop-blur shadow-md opacity-0 group-hover/gallery:opacity-100 hover:border-accent hover:text-accent transition cursor-pointer"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+          </button>
+          <button
+            type="button"
+            id="gallery-next"
+            aria-label="Scroll to next screenshots"
+            class="hidden sm:flex absolute right-1 top-1/2 -mt-1.5 -translate-y-1/2 z-10 h-9 w-9 items-center justify-center rounded-full bg-surface/90 border border-border text-primary backdrop-blur shadow-md opacity-0 group-hover/gallery:opacity-100 hover:border-accent hover:text-accent transition cursor-pointer"
+          >
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+          </button>
         </div>
       </section>
     )}

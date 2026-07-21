@@ -113,7 +113,13 @@ const { title } = Astro.props;
 			class="fixed inset-0 z-[9998] hidden items-center justify-center bg-background/95 backdrop-blur-sm p-6 cursor-zoom-out"
 			aria-hidden="true"
 		>
-			<img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[92vw] rounded-lg border border-border object-contain" />
+			<button id="lightbox-prev" type="button" aria-label="Previous screenshot" class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center rounded-full bg-surface/80 border border-border text-primary hover:border-accent hover:text-accent transition cursor-pointer">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+			</button>
+			<img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[80vw] rounded-lg border border-border object-contain" />
+			<button id="lightbox-next" type="button" aria-label="Next screenshot" class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center rounded-full bg-surface/80 border border-border text-primary hover:border-accent hover:text-accent transition cursor-pointer">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+			</button>
 		</div>
 	</body>
 </html>
@@ -332,13 +338,21 @@ const { title } = Astro.props;
 		revealEls.forEach((el) => revealObserver.observe(el));
 	}
 
-	// Lightbox for screenshot galleries.
+	// Screenshot gallery: lightbox with prev/next traversal.
 	const lightbox = document.getElementById('lightbox');
 	const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement | null;
-	if (lightbox && lightboxImg) {
-		const openLightbox = (src: string, alt: string) => {
-			lightboxImg.src = src;
-			lightboxImg.alt = alt;
+	const galleryImgs = Array.from(document.querySelectorAll<HTMLImageElement>('img[data-lightbox]'));
+
+	if (lightbox && lightboxImg && galleryImgs.length) {
+		let index = -1;
+		const render = (i: number) => {
+			index = (i + galleryImgs.length) % galleryImgs.length;
+			const img = galleryImgs[index];
+			lightboxImg.src = img.currentSrc || img.src;
+			lightboxImg.alt = img.alt;
+		};
+		const open = (i: number) => {
+			render(i);
 			lightbox.classList.remove('hidden');
 			lightbox.classList.add('flex');
 			lightbox.setAttribute('aria-hidden', 'false');
@@ -348,14 +362,47 @@ const { title } = Astro.props;
 			lightbox.classList.remove('flex');
 			lightbox.setAttribute('aria-hidden', 'true');
 			lightboxImg.removeAttribute('src');
+			index = -1;
 		};
-		document.querySelectorAll<HTMLImageElement>('img[data-lightbox]').forEach((img) => {
-			img.addEventListener('click', () => openLightbox(img.currentSrc || img.src, img.alt));
-		});
+		galleryImgs.forEach((img, i) => img.addEventListener('click', () => open(i)));
+		lightboxImg.addEventListener('click', (e) => e.stopPropagation());
 		lightbox.addEventListener('click', closeLightbox);
-		document.addEventListener('keydown', (e) => {
-			if (e.key === 'Escape' && !lightbox.classList.contains('hidden')) closeLightbox();
+		document.getElementById('lightbox-prev')?.addEventListener('click', (e) => {
+			e.stopPropagation();
+			render(index - 1);
 		});
+		document.getElementById('lightbox-next')?.addEventListener('click', (e) => {
+			e.stopPropagation();
+			render(index + 1);
+		});
+		document.addEventListener('keydown', (e) => {
+			if (lightbox.classList.contains('hidden')) return;
+			if (e.key === 'Escape') closeLightbox();
+			else if (e.key === 'ArrowLeft') render(index - 1);
+			else if (e.key === 'ArrowRight') render(index + 1);
+		});
+	}
+
+	// Filmstrip: arrow buttons scroll it; vertical wheel scrolls horizontally.
+	const strip = document.getElementById('gallery-strip');
+	if (strip) {
+		const step = () => Math.max(strip.clientWidth * 0.8, 220);
+		document.getElementById('gallery-prev')?.addEventListener('click', () =>
+			strip.scrollBy({ left: -step(), behavior: 'smooth' })
+		);
+		document.getElementById('gallery-next')?.addEventListener('click', () =>
+			strip.scrollBy({ left: step(), behavior: 'smooth' })
+		);
+		strip.addEventListener(
+			'wheel',
+			(e) => {
+				if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+					strip.scrollLeft += e.deltaY;
+					e.preventDefault();
+				}
+			},
+			{ passive: false }
+		);
 	}
 </script>
 

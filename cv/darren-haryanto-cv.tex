@@ -1,0 +1,140 @@
+% =====================================================================
+% Darren Oliver Putra Haryanto - CV
+% ---------------------------------------------------------------------
+% HOW TO USE ON OVERLEAF:
+%   1. Go to overleaf.com and click "New Project" > "Blank Project".
+%   2. Delete the default main.tex content and paste this whole file in.
+%   3. Set the compiler to pdfLaTeX (Menu > Settings > Compiler: pdfLaTeX).
+%   4. Click "Recompile". That is it.
+%
+% Everything below uses only packages bundled with Overleaf, so there is
+% nothing to install. Edit the accent colour, the font, or any entry to
+% make it yours.
+% =====================================================================
+
+\documentclass[a4paper,11pt]{article}
+
+% ---- Packages (all available on Overleaf) ----
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1.6cm]{geometry}
+\usepackage{charter}            % clean serif; comment this line for the default font
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{fontawesome5}
+\usepackage[hidelinks]{hyperref}
+
+% ---- Brand colours ----
+\definecolor{accent}{HTML}{2563EB}
+\definecolor{muted}{HTML}{555555}
+\hypersetup{colorlinks=true, urlcolor=accent, linkcolor=accent}
+
+% ---- Page + paragraph ----
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\renewcommand{\baselinestretch}{1.03}
+
+% ---- Section headers: accent title with a hairline rule ----
+\titleformat{\section}
+  {\large\bfseries\color{accent}}{}{0em}{}[\vspace{-0.55em}\color{muted!40}\rule{\linewidth}{0.6pt}]
+\titlespacing{\section}{0pt}{1.05em}{0.55em}
+
+% ---- Entry macro: title (bold) ... right-meta / subtitle (italic) ... right-meta ----
+\newcommand{\entry}[4]{%
+  \textbf{#1}\hfill{\color{muted}#2}\\[0.15em]
+  {\color{muted}\textit{#3}}\hfill{\color{muted}#4}\par\vspace{0.15em}%
+}
+
+\newlist{tight}{itemize}{1}
+\setlist[tight]{leftmargin=1.2em, itemsep=1pt, topsep=2pt, parsep=0pt}
+
+\begin{document}
+
+% ================= HEADER =================
+\begin{center}
+  {\Huge\bfseries Darren Oliver Putra Haryanto}\\[0.35em]
+  {\color{muted}Computer Science Student \ \textbullet\ \ Laboratory Resource Management Officer}\\[0.55em]
+  \small
+  \faEnvelope[regular]\ \href{mailto:darrenharyanto@gmail.com}{darrenharyanto@gmail.com}
+  \ \ \textbullet\ \
+  \faPhone\ +62 811-1777-566
+  \ \ \textbullet\ \
+  \faGlobe\ \href{https://darrenharyanto.com}{darrenharyanto.com}
+  \ \ \textbullet\ \
+  \faLinkedin\ \href{https://www.linkedin.com/in/darren-haryanto-164841264}{darren-haryanto}
+\end{center}
+
+\vspace{0.3em}
+
+% ================= SUMMARY =================
+\section{Summary}
+Computer Science student and Laboratory Assistant with a strong passion for coding. Experienced in low-level languages like Rust and C, as well as modern web development. Comfortable teaching, collaborating, and managing technical teams.
+
+% ================= EXPERIENCE =================
+\section{Experience}
+\entry{Laboratory Resource Management Officer}{Jan 2026 - Present}{Bina Nusantara, Alam Sutera}{}
+\begin{tight}
+  \item Guide and manage laboratory assistants across the Binus laboratories.
+  \item Allocate schedules and lead briefings.
+  \item Handle recruitment for all Binus laboratories.
+\end{tight}
+\vspace{0.4em}
+
+\entry{Full-Time Software Lab Assistant}{Feb 2025 - Jan 2026}{Bina Nusantara, Alam Sutera}{}
+\begin{tight}
+  \item Taught students and graded projects and quizzes.
+  \item Managed software lab trainee presentations.
+  \item Passed Progressive Assistant Tests with distinction.
+\end{tight}
+\vspace{0.4em}
+
+\entry{Part-Time Software Lab Assistant}{Sep 2024 - Jan 2025}{Bina Nusantara, Alam Sutera}{}
+\begin{tight}
+  \item Instructed students and developed quiz and project materials.
+\end{tight}
+
+% ================= PROJECTS =================
+\section{Projects}
+\entry{Lively}{2026}{Elder-care companion over WhatsApp \ \textbullet\ \ \href{https://lively.darrenharyanto.com}{lively.darrenharyanto.com}}{}
+\begin{tight}
+  \item Coaches Indonesian elders through a daily strength routine over WhatsApp, with no app install required.
+  \item Four services in one monorepo (Fastify backend, OpenAI bot, Expo family app, landing) on the official Meta WhatsApp Cloud API. Built for Garuda Hacks 7.0.
+\end{tight}
+\vspace{0.4em}
+
+\entry{HireScope}{2026}{IT career-intelligence dashboard \ \textbullet\ \ \href{https://intern.darrenharyanto.com}{intern.darrenharyanto.com}}{}
+\begin{tight}
+  \item Next.js dashboard that turns scraped IT job listings into analytics on skills, salaries, and trending roles for the Indonesian market.
+  \item Next.js 16, React 19, Tailwind CSS 4, Drizzle ORM over Neon PostgreSQL, Recharts.
+\end{tight}
+\vspace{0.4em}
+
+\entry{pdf-Processor}{2026}{Browser-based PDF toolkit \ \textbullet\ \ \href{https://pdf.darrenharyanto.com}{pdf.darrenharyanto.com}}{}
+\begin{tight}
+  \item Drop, transform, and download PDF studio with merge, extract, security, and office operations, deployed as a containerized service.
+\end{tight}
+
+% ================= EDUCATION =================
+\section{Education}
+\entry{Universitas Bina Nusantara}{2023 - 2027 (Expected)}{Bachelor of Computer Science}{GPA 3.82 / 4.00}
+\begin{tight}
+  \item Scholarship Mentor for Odd Semester 2025 / 2026.
+\end{tight}
+\vspace{0.4em}
+
+\entry{IPEKA Puri}{2020 - 2023}{High School Diploma}{Score 88.96 / 100}
+
+% ================= SKILLS =================
+\section{Skills}
+\textbf{Languages:} Rust, Go, C, C\#, Java, TypeScript \\
+\textbf{Web:} React, Next.js, Astro, Tailwind CSS \\
+\textbf{Data:} PostgreSQL, T-SQL, Drizzle ORM
+
+% ================= ORGANIZATIONS =================
+\section{Organizations}
+\entry{Ureeka Alam Sutera}{Apr 2024 - Present}{Member (Hackathons and Support)}{}
+\vspace{0.3em}
+\entry{First Year Program}{Feb 2024 - Jan 2025}{Freshmen Partner}{}
+
+\end{document}
