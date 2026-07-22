@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
 import { projects } from '../data/projects';
 
 // Show featured projects on the home page (fall back to the first few).
@@ -364,9 +365,7 @@ const skills = [
     </div>
   </section>
 
-  <footer class="text-center text-sm text-muted pt-10 border-t border-border">
-    <p>&copy; {new Date().getFullYear()} Darren Haryanto. Built with Astro.</p>
-  </footer>
+  <Footer class="pt-10" />
   </div>
 </Layout>
 

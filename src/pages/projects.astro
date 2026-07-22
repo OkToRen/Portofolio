@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
 import { projects } from '../data/projects';
 
 // Featured first, then the rest, both keep their declared order.
@@ -74,7 +75,5 @@ const sorted = [...projects].sort(
     ))}
   </section>
 
-  <footer class="text-center text-sm text-muted pt-16 mt-16 border-t border-border">
-    <p>&copy; {new Date().getFullYear()} Darren Haryanto. Built with Astro.</p>
-  </footer>
+  <Footer class="mt-16 pt-16" />
 </Layout>

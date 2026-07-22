@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import Footer from '../../components/Footer.astro';
 import { projects } from '../../data/projects';
 
 export function getStaticPaths() {
@@ -161,8 +162,9 @@ const { project } = Astro.props;
       ))}
     </div>
 
-    <footer class="text-center text-sm text-muted pt-16 mt-16 border-t border-border">
+    <div class="text-center text-sm pt-16 mt-16">
       <a href="/projects" class="text-accent hover:underline">← Back to all projects</a>
-    </footer>
+    </div>
+    <Footer class="mt-12 pt-10" />
   </article>
 </Layout>

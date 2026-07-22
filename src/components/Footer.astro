@@ -1,0 +1,44 @@
+---
+// Shared site footer: copyright + colophon link, and a second line with
+// the visitor-facing local time in Tangerang and the last-commit date
+// (read from git at build time — see src/data/site.ts).
+import { site } from '../data/site';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className = 'mt-16 pt-10' } = Astro.props;
+---
+
+<footer class:list={['text-center text-sm text-muted border-t border-border', className]}>
+  <p>
+    &copy; {new Date().getFullYear()} Darren Haryanto. Built with
+    <a href="https://astro.build" target="_blank" rel="noopener" class="hover:text-accent transition-colors">Astro</a>.
+    <span class="text-border">·</span>
+    <a href="/colophon" class="hover:text-accent transition-colors">Colophon</a>
+  </p>
+  <p class="font-mono text-xs mt-2" data-footer-line data-updated={site.lastUpdated}>
+    Last commit {site.lastUpdated}
+  </p>
+</footer>
+
+<script>
+  // Prepend the current time in Tangerang (WIB) to the footer line and keep
+  // it ticking. Without JS the static "Last commit …" line stands alone.
+  const line = document.querySelector<HTMLElement>('[data-footer-line]');
+  if (line) {
+    const updated = line.dataset.updated;
+    const fmt = new Intl.DateTimeFormat('en-GB', {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'Asia/Jakarta',
+    });
+    const tick = () => {
+      line.textContent = `It's ${fmt.format(new Date())} in Tangerang · last commit ${updated}`;
+    };
+    tick();
+    setInterval(tick, 30_000);
+  }
+</script>
