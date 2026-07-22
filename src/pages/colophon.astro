@@ -1,0 +1,111 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Colophon | Darren Haryanto">
+  <section class="mb-16">
+    <a
+      href="/#content"
+      class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors mb-10"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Back to portfolio
+    </a>
+
+    <h1 class="text-primary font-display font-medium text-5xl md:text-6xl tracking-tight mb-4">
+      Colophon<span class="text-accent">.</span>
+    </h1>
+    <p class="text-muted leading-relaxed text-lg max-w-2xl">
+      The making of this site: what it runs on, the type it's set in, and the things I tried
+      that didn't survive.
+    </p>
+  </section>
+
+  <section class="mb-16 pb-12 border-b border-border max-w-2xl">
+    <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">Stack</h2>
+    <div class="space-y-4 text-muted leading-relaxed">
+      <p>
+        This is a static <a href="https://astro.build" target="_blank" rel="noopener" class="text-accent hover:underline">Astro</a>
+        site styled with Tailwind CSS v4. There's no client framework; the interactive parts,
+        the theme toggle, the lightbox, the pointer effects, are small hand-written scripts.
+        Every project page is generated from one typed data file, so adding a project means
+        editing code, not a CMS.
+      </p>
+      <p>
+        It's deployed on my own server with Docker Compose behind nginx. The code lives on
+        GitHub and on a self-hosted Gitea instance, where a workflow checks the production
+        build on every push.
+      </p>
+    </div>
+  </section>
+
+  <section class="mb-16 pb-12 border-b border-border max-w-2xl">
+    <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">Type &amp; color</h2>
+    <div class="space-y-4 text-muted leading-relaxed">
+      <p>
+        Headings are set in <span class="text-primary font-display">Fraunces</span>, a serif with
+        enough character to not feel like a template. Body text is Inter Tight, and the small
+        labels, dates, and tags are <span class="font-mono text-sm">JetBrains Mono</span>.
+      </p>
+      <p>
+        Colors are defined in OKLCH around a single blue accent. Dark is the default; the light
+        theme flips with a circular reveal that spreads out from the toggle button, driven by the
+        View Transitions API. A faint film grain sits over everything so the flat surfaces read
+        as paper rather than plastic.
+      </p>
+    </div>
+  </section>
+
+  <section class="mb-16 pb-12 border-b border-border max-w-2xl">
+    <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">What didn't survive</h2>
+    <p class="text-muted leading-relaxed mb-6">
+      The git history remembers everything I changed my mind about. A few of them:
+    </p>
+    <ul class="space-y-4 text-muted leading-relaxed">
+      <li class="pl-6 border-l-2 border-border">
+        The project cards used to tilt about four degrees toward the pointer. It looked like the
+        cards were being dragged around the page, so the tilt is now 1.5 degrees, barely there
+        on purpose.
+      </li>
+      <li class="pl-6 border-l-2 border-border">
+        My phone number sat in the hero next to Email and LinkedIn. It's a GitHub link now,
+        which is more useful to anyone actually reading this page.
+      </li>
+      <li class="pl-6 border-l-2 border-border">
+        The first screenshot gallery was a tall masonry wall that pushed the write-ups below the
+        fold. It became a compact filmstrip instead.
+      </li>
+      <li class="pl-6 border-l-2 border-border">
+        A "Scroll to explore" prompt is still in the source, commented out. The hero fading as
+        you scroll turned out to explain itself.
+      </li>
+      <li class="pl-6 border-l-2 border-border">
+        At one point I went through the copy and removed every em dash.
+      </li>
+    </ul>
+  </section>
+
+  <section class="max-w-2xl">
+    <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">Small print</h2>
+    <div class="space-y-4 text-muted leading-relaxed">
+      <p>
+        The doodles in the hero are hand-tweaked SVG paths that draw themselves, hold for a
+        moment, and erase on a loop. Most of them are hidden on phones.
+      </p>
+      <p>
+        The cursor ring, the glow that pools over the content, and the magnetic buttons in the
+        corner are deliberately faint, and all of them switch off on touch screens and under
+        <span class="font-mono text-sm">prefers-reduced-motion</span>.
+      </p>
+      <p>
+        The timestamp in the footer is the date of the last commit, read from git when the
+        site builds.
+      </p>
+    </div>
+  </section>
+
+  <Footer />
+</Layout>
