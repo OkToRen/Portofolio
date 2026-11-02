@@ -246,7 +246,7 @@ export const projects: Project[] = [
     year: '2026',
     role: 'Designer & Developer',
     status: 'Live',
-    tech: ['Astro', 'Tailwind CSS', 'TypeScript', 'GSAP'],
+    tech: ['Astro', 'Tailwind CSS', 'TypeScript', 'GSAP', 'Lenis'],
     highlights: [
       'Static site built with Astro 5',
       'Light and dark theme using the View Transitions API',
@@ -282,6 +282,7 @@ export const projects: Project[] = [
           'Tailwind CSS v4: utility-first styling with custom OKLCH theme tokens.',
           'TypeScript: for the interactive client scripts.',
           'GSAP: powers the animated card navigation.',
+          'Lenis: smooths wheel scrolling and menu anchor jumps.',
         ],
       },
       {

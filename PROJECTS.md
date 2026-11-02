@@ -190,7 +190,7 @@ whether the backend is online.
 - **Role:** Designer & Developer
 - **Status:** Live
 - **Year:** 2026
-- **Tech:** Astro, Tailwind CSS, TypeScript, GSAP
+- **Tech:** Astro, Tailwind CSS, TypeScript, GSAP, Lenis
 - **Live site:** https://darrenharyanto.com
 - **GitHub:** https://github.com/OkToRen/portofolio
 
@@ -209,6 +209,7 @@ CSS v4, and enhanced with a handful of lightweight animations.
 - **Tailwind CSS v4:** utility-first styling with custom OKLCH theme tokens.
 - **TypeScript:** for the interactive client scripts.
 - **GSAP:** powers the animated card navigation.
+- **Lenis:** smooths wheel scrolling and menu anchor jumps.
 
 ### Features
 
