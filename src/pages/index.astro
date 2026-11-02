@@ -370,12 +370,6 @@ const skills = [
 </Layout>
 
 <style>
-  /* Smooth scroll behavior */
-  html {
-    scroll-behavior: smooth;
-  }
-
-  /* Custom smooth scrolling with easing */
   * {
     scroll-padding-top: 100px;
   }
@@ -871,32 +865,6 @@ const skills = [
 </style>
 
 <script>
-  // Smooth scroll with momentum and easing
-  let isScrolling = false;
-  let targetScroll = 0;
-  let currentScroll = 0;
-
-  // Enhanced smooth scroll for anchor links
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    const link = target.closest('a[href^="#"]') as HTMLAnchorElement;
-    
-    if (link && link.hash) {
-      e.preventDefault();
-      const targetElement = document.querySelector(link.hash);
-      
-      if (targetElement) {
-        const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY - 80;
-        
-        // Smooth scroll with custom easing
-        window.scrollTo({
-          top: targetPosition,
-          behavior: 'smooth'
-        });
-      }
-    }
-  });
-
   // Parallax scroll effect
   let ticking = false;
   let scrollThreshold = false;
@@ -999,19 +967,6 @@ const skills = [
   );
   
   sections.forEach((section) => sectionObserver.observe(section));
-  
-  // Enhanced smooth scrolling with momentum
-  let isWheelScrolling = false;
-  let wheelTimeout: number;
-
-  window.addEventListener('wheel', (e) => {
-    isWheelScrolling = true;
-    clearTimeout(wheelTimeout);
-    
-    wheelTimeout = window.setTimeout(() => {
-      isWheelScrolling = false;
-    }, 150);
-  }, { passive: true });
   
   // Smooth scroll on prompt click
   const scrollPrompt = document.querySelector('.scroll-prompt');

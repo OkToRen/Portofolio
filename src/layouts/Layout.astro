@@ -1,4 +1,5 @@
 ---
+import 'lenis/dist/lenis.css';
 import '../styles/global.css';
 
 interface Props {
@@ -9,7 +10,7 @@ const { title } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="Darren Oliver Putra Haryanto - Portfolio" />
@@ -130,6 +131,12 @@ const { title } = Astro.props;
 </html>
 
 <script>
+	import Lenis from 'lenis';
+
+	// Smooth wheel scrolling. Touch stays native, and Lenis turns itself off
+	// under prefers-reduced-motion.
+	const lenis = new Lenis({ autoRaf: true });
+
 	const theme = (() => {
 		if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
 			return localStorage.getItem('theme');
@@ -254,51 +261,18 @@ const { title } = Astro.props;
 		}
 	});
 
-	// Custom smooth scroll function with 800ms duration
-	const  smoothScrollTo = (targetPosition: number, duration: number = 800) => {
-		const startPosition = window.scrollY;
-		const distance = targetPosition - startPosition;
-		let startTime: number | null = null;
-
-		const easeInOutCubic = (t: number): number => {
-			return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-		};
-
-		const animation = (currentTime: number) => {
-			if (startTime === null) startTime = currentTime;
-			const timeElapsed = currentTime - startTime;
-			const progress = Math.min(timeElapsed / duration, 1);
-			const ease = easeInOutCubic(progress);
-
-			window.scrollTo(0, startPosition + distance * ease);
-
-			if (timeElapsed < duration) {
-				requestAnimationFrame(animation);
-			}
-		};
-
-		requestAnimationFrame(animation);
-	};
-
 	// Close menu when clicking a menu item
 	dropdownMenu?.querySelectorAll('a').forEach(link => {
 		link.addEventListener('click', (e) => {
 			const href = link.getAttribute('href');
-			
-			// Handle anchor links with smooth scrolling
-			if (href?.startsWith('/#')) {
+
+			// Same-page anchors scroll; on other pages the link navigates normally
+			const targetElement = href?.startsWith('/#') ? document.getElementById(href.substring(2)) : null;
+			if (targetElement) {
 				e.preventDefault();
-				const targetId = href.substring(2); // Remove /#
-				const targetElement = document.getElementById(targetId);
-				
-				if (targetElement) {
-					const targetPosition = targetElement.getBoundingClientRect().top + window.scrollY;
-					const offsetPosition = targetPosition - 100; // Account for scroll-padding-top
-					
-					smoothScrollTo(offsetPosition, 800);
-				}
+				lenis.scrollTo(targetElement, { offset: -100 });
 			}
-			
+
 			if (isMenuOpen) {
 				toggleMenu();
 			}

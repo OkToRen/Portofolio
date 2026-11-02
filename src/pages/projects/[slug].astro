@@ -108,6 +108,7 @@ const { project } = Astro.props;
         <div class="relative group/gallery">
           <div
             id="gallery-strip"
+            data-lenis-prevent-wheel
             class="flex gap-3 overflow-x-auto scroll-smooth pb-3 snap-x [scrollbar-width:thin] [scrollbar-color:var(--color-border)_transparent]"
           >
             {project.images.map((img) => (
