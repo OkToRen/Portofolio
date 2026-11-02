@@ -205,7 +205,7 @@ CSS v4, and enhanced with a handful of lightweight animations.
 
 ### Tech stack
 
-- **Astro 5:** static-first framework for the pages and routing.
+- **Astro 7:** static-first framework for the pages and routing.
 - **Tailwind CSS v4:** utility-first styling with custom OKLCH theme tokens.
 - **TypeScript:** for the interactive client scripts.
 - **GSAP:** powers the animated card navigation.

@@ -1,5 +1,5 @@
 # ---- Build stage: compile the static site with Astro ----
-FROM node:20-alpine AS build
+FROM node:22-alpine AS build
 WORKDIR /app
 
 # Install dependencies against the lockfile for reproducible builds.

@@ -248,7 +248,7 @@ export const projects: Project[] = [
     status: 'Live',
     tech: ['Astro', 'Tailwind CSS', 'TypeScript', 'GSAP', 'Lenis'],
     highlights: [
-      'Static site built with Astro 5',
+      'Static site built with Astro 7',
       'Light and dark theme using the View Transitions API',
       'Refined editorial type system with a subtle grain texture',
       'Data-driven projects section (this page)',
@@ -278,7 +278,7 @@ export const projects: Project[] = [
       {
         heading: 'Tech stack',
         bullets: [
-          'Astro 5: static-first framework for the pages and routing.',
+          'Astro 7: static-first framework for the pages and routing.',
           'Tailwind CSS v4: utility-first styling with custom OKLCH theme tokens.',
           'TypeScript: for the interactive client scripts.',
           'GSAP: powers the animated card navigation.',
