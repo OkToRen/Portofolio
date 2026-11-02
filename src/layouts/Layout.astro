@@ -270,7 +270,7 @@ const { title } = Astro.props;
 			const targetElement = href?.startsWith('/#') ? document.getElementById(href.substring(2)) : null;
 			if (targetElement) {
 				e.preventDefault();
-				lenis.scrollTo(targetElement, { offset: -100 });
+				lenis.scrollTo(targetElement);
 			}
 
 			if (isMenuOpen) {
