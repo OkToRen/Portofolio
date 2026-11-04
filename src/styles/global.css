@@ -6,9 +6,10 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
-  --font-sans: "Inter Tight", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "JetBrains Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  /* Self-hosted families and their fallbacks come from astro.config.mjs (<Font /> in Layout) */
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-inter-tight);
+  --font-mono: var(--font-jetbrains-mono);
 
   /* Dark mode (default),cool-neutral paper, blue accent */
   --color-background: oklch(0.16 0.004 285);
