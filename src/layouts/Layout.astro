@@ -24,6 +24,16 @@ const { title } = Astro.props;
 			rel="stylesheet"
 		/>
 		<title>{title}</title>
+		<!-- Runs before first paint so a light-mode visitor never sees the dark default -->
+		<script is:inline>
+			(() => {
+				let theme = null;
+				try { theme = localStorage.getItem('theme'); } catch {}
+				if (!theme) theme = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+				document.documentElement.classList.toggle('light', theme === 'light');
+				try { localStorage.setItem('theme', theme); } catch {}
+			})();
+		</script>
 	</head>
 	<body class="bg-background text-primary font-sans antialiased selection:bg-accent selection:text-white transition-colors duration-300">
 		<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-6 focus:left-6 focus:z-[10000] focus:px-4 focus:py-3 focus:rounded-lg focus:bg-surface focus:text-primary focus:border focus:border-accent">Skip to content</a>
@@ -143,23 +153,7 @@ const { title } = Astro.props;
 	// under prefers-reduced-motion.
 	const lenis = new Lenis({ autoRaf: true });
 
-	const theme = (() => {
-		if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-			return localStorage.getItem('theme');
-		}
-		if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-			return 'light';
-		}
-		return 'dark';
-	})();
-
-	if (theme === 'light') {
-		document.documentElement.classList.add('light');
-	} else {
-		document.documentElement.classList.remove('light');
-	}
-
-	window.localStorage.setItem('theme', theme as string);
+	// The theme class is set by the inline script in <head>, before first paint.
 
 	const handleToggleClick = (event: MouseEvent) => {
 		const element = document.documentElement;
