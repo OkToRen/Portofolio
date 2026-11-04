@@ -771,7 +771,11 @@ const skills = [
   /* Portfolio Content */
   .portfolio-content {
     position: relative;
-    background: var(--color-background);
+    /* Paint the page colour across the full viewport width, not just the
+       max-w-4xl column, and fade it in over 120px above the content so the
+       fixed hero behind slides under a soft edge instead of a hard box.
+       border-image outset is ink overflow, so it adds no horizontal scroll. */
+    border-image: linear-gradient(to bottom, transparent, var(--color-background) 120px) fill 0 // 120px 100vmax 0;
     z-index: 20;
     /* 100px clearance, plus the 50px the reveal transform adds until .visible */
     scroll-margin-top: 150px;
