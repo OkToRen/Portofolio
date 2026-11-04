@@ -29,7 +29,7 @@ const { title } = Astro.props;
 		<div class="fixed top-6 right-6 flex gap-3 z-50">
 			<!-- Collapsible Menu Button -->
 			<div class="relative">
-				<button id="menu-toggle" data-magnetic class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-all" aria-label="Toggle menu">
+				<button id="menu-toggle" data-magnetic class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-[transform,scale,border-color] duration-200 ease-out active:scale-[0.97]" aria-label="Toggle menu">
 					<svg id="menu-icon-open" class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
 					</svg>
@@ -39,7 +39,7 @@ const { title } = Astro.props;
 				</button>
 				
 				<!-- Dropdown Menu -->
-				<div id="dropdown-menu" class="absolute top-full right-0 mt-2 w-48 rounded-lg bg-surface border border-border shadow-lg opacity-0 invisible transition-all duration-300 transform scale-95 origin-top-right">
+				<div id="dropdown-menu" class="absolute top-full right-0 mt-2 w-48 rounded-lg bg-surface border border-border shadow-lg opacity-0 invisible transition-[opacity,scale,visibility] duration-150 ease-out scale-95 origin-top-right">
 					<nav class="py-2">
 						<a href="/#content" class="block px-4 py-2.5 text-sm text-primary hover:text-accent hover:bg-background transition-colors">
 							<div class="flex items-center gap-2">
@@ -88,7 +88,7 @@ const { title } = Astro.props;
 			<a href="/cv.pdf" download="Darren_Haryanto_CV.pdf"
 			   id="cv-download"
 			   data-magnetic
-			   class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-all flex items-center gap-2 text-sm font-medium text-primary hover:text-accent"
+			   class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-[transform,scale,border-color,color] duration-200 ease-out active:scale-[0.97] flex items-center gap-2 text-sm font-medium text-primary hover:text-accent"
 			   aria-label="Download CV">
 				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -96,7 +96,7 @@ const { title } = Astro.props;
 				<span class="hidden sm:inline">CV</span>
 			</a>
 			
-			<button id="theme-toggle" data-magnetic class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-all" aria-label="Toggle theme">
+			<button id="theme-toggle" data-magnetic class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-[transform,scale,border-color] duration-200 ease-out active:scale-[0.97]" aria-label="Toggle theme">
 				<svg id="theme-icon-dark" class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
 				</svg>
@@ -415,6 +415,12 @@ const { title } = Astro.props;
 			lightbox.classList.remove('hidden');
 			lightbox.classList.add('flex');
 			lightbox.setAttribute('aria-hidden', 'false');
+			// Enter softly; closing stays instant (exits should be faster than entries).
+			const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
+			lightbox.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: ease });
+			if (!prefersReducedMotion) {
+				lightboxImg.animate([{ transform: 'scale(0.96)' }, { transform: 'none' }], { duration: 220, easing: ease });
+			}
 		};
 		const closeLightbox = () => {
 			lightbox.classList.add('hidden');

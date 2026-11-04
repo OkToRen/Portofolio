@@ -272,7 +272,7 @@ const skills = [
     <div class="space-y-12">
       {experience.map((job) => (
         <div class="group relative pl-6 border-l-2 border-border hover:border-accent transition-colors duration-300">
-          <div class="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-surface border-2 border-border group-hover:border-accent group-hover:bg-accent transition-all duration-300"></div>
+          <div class="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-surface border-2 border-border group-hover:border-accent group-hover:bg-accent transition-colors duration-300"></div>
           <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-3">
             <h3 class="text-primary font-semibold text-lg">{job.role}</h3>
             <span class="text-xs text-muted font-mono bg-surface px-3 py-1 rounded-full">{job.date}</span>
@@ -293,7 +293,7 @@ const skills = [
     <h2 class="text-primary font-bold mb-8 uppercase tracking-wider text-sm">Technical Stack</h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
       {skills.map((skill) => (
-        <div class="bg-surface border border-border hover:border-accent p-4 rounded-lg text-center text-sm font-medium transition-all hover:-translate-y-1 hover:shadow-lg">
+        <div class="bg-surface border border-border hover:border-accent p-4 rounded-lg text-center text-sm font-medium transition-[translate,border-color,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-lg">
           {skill}
         </div>
       ))}
@@ -656,10 +656,6 @@ const skills = [
     padding: 0 2rem;
   }
   
-  .hero-inner {
-    animation: fadeInUp 1.2s ease-out;
-  }
-  
   .hero-name {
     font-family: var(--font-display);
     font-size: clamp(3.25rem, 9vw, 7.5rem);
@@ -668,7 +664,7 @@ const skills = [
     letter-spacing: -0.025em;
     color: var(--color-primary);
     margin-bottom: 2rem;
-    animation: fadeInUp 1.2s ease-out 0.2s both;
+    animation: fadeInUp 0.8s var(--ease-out) 0.1s both;
   }
 
   .hero-dot {
@@ -680,7 +676,7 @@ const skills = [
     font-size: clamp(0.95rem, 2vw, 1.35rem);
     color: var(--color-muted);
     margin-bottom: 3rem;
-    animation: fadeInUp 1.2s ease-out 0.4s both;
+    animation: fadeInUp 0.8s var(--ease-out) 0.18s both;
     font-weight: 400;
     letter-spacing: 0.01em;
   }
@@ -692,7 +688,7 @@ const skills = [
     justify-content: center;
     align-items: center;
     font-size: 1.125rem;
-    animation: fadeInUp 1.2s ease-out 0.6s both;
+    animation: fadeInUp 0.8s var(--ease-out) 0.26s both;
   }
   
   .hero-link {
@@ -700,7 +696,7 @@ const skills = [
     text-decoration: none;
     position: relative;
     font-weight: 500;
-    transition: color 0.3s ease;
+    transition: color 0.2s ease;
   }
   
   .hero-link::before {
@@ -713,7 +709,7 @@ const skills = [
     background: var(--color-accent);
     transform: scaleX(0);
     transform-origin: right;
-    transition: transform 0.3s ease;
+    transition: transform 0.25s var(--ease-out);
   }
   
   .hero-link:hover::before {
@@ -764,7 +760,7 @@ const skills = [
   @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(40px);
+      transform: translateY(24px);
     }
     to {
       opacity: 1;
@@ -798,13 +794,11 @@ const skills = [
     position: relative;
     background: var(--color-background);
     z-index: 20;
-    margin-top: 100vh;
     /* 100px clearance, plus the 50px the reveal transform adds until .visible */
     scroll-margin-top: 150px;
     opacity: 0;
     transform: translateY(50px);
-    transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), 
-                transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
   }
   
   .portfolio-content.visible {
@@ -816,14 +810,36 @@ const skills = [
   /* Section animations */
   .portfolio-content section {
     opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1),
-                transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateY(16px);
+    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
   }
-  
+
   .portfolio-content section.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Reduced motion: no drift, no doodles, no travel. The content is simply
+     there, and the hero still fades (opacity only) as you scroll. */
+  @media (prefers-reduced-motion: reduce) {
+    .floating-element,
+    .doodle-svg,
+    .doodle-svg .doodle-path,
+    .hero-name,
+    .hero-role,
+    .hero-contacts {
+      animation: none;
+    }
+
+    .portfolio-content,
+    .portfolio-content section {
+      opacity: 1;
+      transform: none;
+    }
+
+    .portfolio-content {
+      scroll-margin-top: 100px;
+    }
   }
   
   @media (max-width: 768px) {
@@ -868,10 +884,11 @@ const skills = [
 </style>
 
 <script>
-  // Parallax scroll effect
+  // Parallax scroll effect. Under reduced motion only the fades run.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let ticking = false;
   let scrollThreshold = false;
-  
+
   function handleScroll() {
     const scrollY = window.scrollY;
     const windowHeight = window.innerHeight;
@@ -892,7 +909,7 @@ const skills = [
       const scale = 1 - scrollProgress * 0.3;
       
       heroInner.style.opacity = Math.max(0, opacity).toString();
-      heroInner.style.transform = `translateY(-${translateY}px) scale(${scale})`;
+      if (!reduceMotion) heroInner.style.transform = `translateY(-${translateY}px) scale(${scale})`;
       
       // Hide scroll prompt earlier
       if (scrollPrompt) {
@@ -900,18 +917,20 @@ const skills = [
       }
       
       // Move background elements at different speeds (parallax)
-      floatingElements.forEach((elem, index) => {
-        const speed = 0.3 + (index * 0.15);
-        const moveY = scrollProgress * windowHeight * speed;
-        const rotate = scrollProgress * 90 * (index % 2 === 0 ? 1 : -1);
-        (elem as HTMLElement).style.transform = `translateY(${moveY}px) rotate(${rotate}deg)`;
-      });
-      
-      // Scale and blur background
-      const bgScale = 1 + scrollProgress * 0.5;
-      const bgBlur = scrollProgress * 20;
-      parallaxBg.style.transform = `scale(${bgScale})`;
-      parallaxBg.style.filter = `blur(${bgBlur}px)`;
+      if (!reduceMotion) {
+        floatingElements.forEach((elem, index) => {
+          const speed = 0.3 + (index * 0.15);
+          const moveY = scrollProgress * windowHeight * speed;
+          const rotate = scrollProgress * 90 * (index % 2 === 0 ? 1 : -1);
+          (elem as HTMLElement).style.transform = `translateY(${moveY}px) rotate(${rotate}deg)`;
+        });
+
+        // Scale and blur background
+        const bgScale = 1 + scrollProgress * 0.5;
+        const bgBlur = scrollProgress * 20;
+        parallaxBg.style.transform = `scale(${bgScale})`;
+        parallaxBg.style.filter = `blur(${bgBlur}px)`;
+      }
       parallaxBg.style.opacity = (1 - scrollProgress * 0.7).toString();
       
       // Hide hero completely when scrolled past
@@ -924,13 +943,12 @@ const skills = [
       }
     }
     
-    // Show content only after hero transition is complete
-    if (content && scrollProgress >= 0.85 && !scrollThreshold) {
+    // Bring the content in halfway through the hero fade, so the screen
+    // between the two is never empty.
+    if (content && scrollProgress >= 0.5 && !scrollThreshold) {
       scrollThreshold = true;
-      setTimeout(() => {
-        content.classList.add('visible');
-      }, 200);
-    } else if (content && scrollProgress < 0.85 && scrollThreshold) {
+      content.classList.add('visible');
+    } else if (content && scrollProgress < 0.5 && scrollThreshold) {
       scrollThreshold = false;
       content.classList.remove('visible');
     }
@@ -959,7 +977,7 @@ const skills = [
           // Stagger the animation for a smoother effect
           setTimeout(() => {
             entry.target.classList.add('visible');
-          }, index * 100);
+          }, index * 60);
         }
       });
     },
