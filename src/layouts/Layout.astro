@@ -14,7 +14,7 @@ const { title } = Astro.props;
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content="Darren Oliver Putra Haryanto - Portfolio" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -26,10 +26,12 @@ const { title } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body class="bg-background text-primary font-sans antialiased selection:bg-accent selection:text-white transition-colors duration-300">
-		<div class="fixed top-6 right-6 flex gap-3 z-50">
+		<a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-6 focus:left-6 focus:z-[10000] focus:px-4 focus:py-3 focus:rounded-lg focus:bg-surface focus:text-primary focus:border focus:border-accent">Skip to content</a>
+		<!-- Control cluster: slides away while scrolling down so it never sits on the text, returns on scroll up -->
+		<div id="controls" class="fixed top-6 right-6 flex gap-3 z-50 transition-transform duration-200 ease-out">
 			<!-- Collapsible Menu Button -->
 			<div class="relative">
-				<button id="menu-toggle" data-magnetic class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-[transform,scale,border-color] duration-200 ease-out active:scale-[0.97]" aria-label="Toggle menu">
+				<button id="menu-toggle" data-magnetic class="p-3 rounded-lg bg-surface border border-border hover:border-accent transition-[transform,scale,border-color] duration-200 ease-out active:scale-[0.97]" aria-label="Toggle menu" aria-expanded="false" aria-controls="dropdown-menu">
 					<svg id="menu-icon-open" class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
 					</svg>
@@ -105,7 +107,7 @@ const { title } = Astro.props;
 				</svg>
 			</button>
 		</div>
-		<main class="max-w-4xl mx-auto px-6 py-20">
+		<main id="main" tabindex="-1" class="max-w-4xl mx-auto px-6 py-20 focus:outline-none">
 			<slot />
 		</main>
 
@@ -117,12 +119,16 @@ const { title } = Astro.props;
 		<div
 			id="lightbox"
 			class="fixed inset-0 z-[9998] hidden items-center justify-center bg-background/95 backdrop-blur-sm p-6 cursor-zoom-out"
+			role="dialog"
+			aria-modal="true"
+			aria-label="Screenshot viewer. Arrow keys browse, Escape closes."
 			aria-hidden="true"
+			tabindex="-1"
 		>
 			<button id="lightbox-prev" type="button" aria-label="Previous screenshot" class="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center rounded-full bg-surface/80 border border-border text-primary hover:border-accent hover:text-accent transition cursor-pointer">
 				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
 			</button>
-			<img id="lightbox-img" src="" alt="" class="max-h-[90vh] max-w-[80vw] rounded-lg border border-border object-contain" />
+			<img id="lightbox-img" alt="" class="max-h-[90vh] max-w-[80vw] rounded-lg border border-border object-contain" />
 			<button id="lightbox-next" type="button" aria-label="Next screenshot" class="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center rounded-full bg-surface/80 border border-border text-primary hover:border-accent hover:text-accent transition cursor-pointer">
 				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
 			</button>
@@ -235,7 +241,8 @@ const { title } = Astro.props;
 
 	const toggleMenu = () => {
 		isMenuOpen = !isMenuOpen;
-		
+		menuToggle?.setAttribute('aria-expanded', String(isMenuOpen));
+
 		if (isMenuOpen) {
 			// Open menu
 			dropdownMenu?.classList.remove('opacity-0', 'invisible', 'scale-95');
@@ -278,6 +285,22 @@ const { title } = Astro.props;
 			}
 		});
 	});
+
+	// Control cluster: tuck it away while reading downwards (it would sit on
+	// the text, especially on phones) and bring it back on any scroll up, when
+	// the menu is open, or when it takes keyboard focus.
+	const controls = document.getElementById('controls');
+	if (controls) {
+		let lastY = window.scrollY;
+		lenis.on('scroll', () => {
+			const y = window.scrollY;
+			if (y < 120 || isMenuOpen || controls.contains(document.activeElement)) controls.classList.remove('is-tucked');
+			else if (y > lastY + 4) controls.classList.add('is-tucked');
+			else if (y < lastY - 4) controls.classList.remove('is-tucked');
+			lastY = y;
+		});
+		controls.addEventListener('focusin', () => controls.classList.remove('is-tucked'));
+	}
 
 	// Respect the user's motion preference for all decorative interactions.
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -404,6 +427,7 @@ const { title } = Astro.props;
 
 	if (lightbox && lightboxImg && galleryImgs.length) {
 		let index = -1;
+		let returnFocus: HTMLElement | null = null;
 		const render = (i: number) => {
 			index = (i + galleryImgs.length) % galleryImgs.length;
 			const img = galleryImgs[index];
@@ -411,10 +435,13 @@ const { title } = Astro.props;
 			lightboxImg.alt = img.alt;
 		};
 		const open = (i: number) => {
+			returnFocus = document.activeElement as HTMLElement | null;
 			render(i);
 			lightbox.classList.remove('hidden');
 			lightbox.classList.add('flex');
 			lightbox.setAttribute('aria-hidden', 'false');
+			lenis.stop();
+			lightbox.focus();
 			// Enter softly; closing stays instant (exits should be faster than entries).
 			const ease = 'cubic-bezier(0.22, 1, 0.36, 1)';
 			lightbox.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 180, easing: ease });
@@ -428,8 +455,11 @@ const { title } = Astro.props;
 			lightbox.setAttribute('aria-hidden', 'true');
 			lightboxImg.removeAttribute('src');
 			index = -1;
+			lenis.start();
+			returnFocus?.focus();
 		};
-		galleryImgs.forEach((img, i) => img.addEventListener('click', () => open(i)));
+		// Each screenshot sits in a button, so Enter/Space open it too.
+		galleryImgs.forEach((img, i) => (img.closest('button') ?? img).addEventListener('click', () => open(i)));
 		lightboxImg.addEventListener('click', (e) => e.stopPropagation());
 		lightbox.addEventListener('click', closeLightbox);
 		document.getElementById('lightbox-prev')?.addEventListener('click', (e) => {
@@ -442,7 +472,13 @@ const { title } = Astro.props;
 		});
 		document.addEventListener('keydown', (e) => {
 			if (lightbox.classList.contains('hidden')) return;
-			if (e.key === 'Escape') closeLightbox();
+			if (e.key === 'Tab') {
+				// Keep focus inside the dialog: cycle between its two buttons.
+				const stops = [document.getElementById('lightbox-prev'), document.getElementById('lightbox-next')];
+				const at = stops.indexOf(document.activeElement as HTMLElement);
+				e.preventDefault();
+				stops[(at + (e.shiftKey ? -1 : 1) + stops.length) % stops.length]?.focus();
+			} else if (e.key === 'Escape') closeLightbox();
 			else if (e.key === 'ArrowLeft') render(index - 1);
 			else if (e.key === 'ArrowRight') render(index + 1);
 		});
@@ -512,18 +548,26 @@ const { title } = Astro.props;
 		}
 	}
 
-	/* Custom scrollbar for that raw engineering feel */
+	/* Custom scrollbar for that raw engineering feel, themed from the tokens
+	   so it follows light and dark */
+	html {
+		scrollbar-color: var(--color-border) var(--color-background);
+	}
 	::-webkit-scrollbar {
 		width: 8px;
 	}
 	::-webkit-scrollbar-track {
-		background: #0f0f10;
+		background: var(--color-background);
 	}
 	::-webkit-scrollbar-thumb {
-		background: #27272a;
+		background: var(--color-border);
 		border-radius: 4px;
 	}
 	::-webkit-scrollbar-thumb:hover {
-		background: #3f3f46;
+		background: var(--color-muted);
+	}
+
+	#controls.is-tucked {
+		transform: translateY(calc(-100% - 2rem));
 	}
 </style>
