@@ -6,7 +6,6 @@ A modern, interactive portfolio website showcasing my professional experience, e
 
 - **[Astro](https://astro.build)** - Fast, modern static site framework
 - **[Tailwind CSS](https://tailwindcss.com)** - Utility-first CSS framework (v4.1.18)
-- **[Framer Motion](https://www.framer.com/motion/)** - Animation library
 - **[Lenis](https://lenis.darkroom.engineering)** - Smooth scrolling
 - **TypeScript** - Type-safe JavaScript
 

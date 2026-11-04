@@ -258,7 +258,7 @@ const skills = [
   <!-- About Section -->
   <section id="about" class="mb-24 pb-16 border-b border-border">
     <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">About</h2>
-    <p class="text-muted leading-relaxed text-lg">
+    <p class="text-muted leading-relaxed text-lg max-w-[65ch]">
       Computer Science student and Laboratory Assistant with a strong passion for coding. 
       Experienced in low-level languages like <span class="text-primary font-semibold">Rust</span> and <span class="text-primary font-semibold">C</span>, 
       as well as modern web development. Accustomed to teaching, collaboration, and managing 
@@ -411,7 +411,7 @@ const skills = [
   .elem-1 {
     width: 400px;
     height: 400px;
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
     top: -10%;
     left: -10%;
     animation-duration: 20s;
@@ -438,26 +438,6 @@ const skills = [
     animation-delay: 4s;
   }
   
-  .elem-4 {
-    width: 250px;
-    height: 250px;
-    background: linear-gradient(135deg, #8b5cf6, #ec4899);
-    bottom: 20%;
-    right: 15%;
-    animation-duration: 18s;
-    animation-delay: 1s;
-  }
-  
-  .elem-5 {
-    width: 200px;
-    height: 200px;
-    background: linear-gradient(135deg, #f59e0b, #ef4444);
-    top: 50%;
-    left: 50%;
-    animation-duration: 30s;
-    animation-delay: 3s;
-  }
-  
   @keyframes drift {
     0%, 100% {
       transform: translate(0, 0) scale(1);
@@ -479,7 +459,6 @@ const skills = [
     opacity: 0;
     color: var(--color-accent);
     pointer-events: none;
-    filter: drop-shadow(0 0 8px rgba(59, 130, 246, 0.2));
   }
 
   .doodle-1 {
@@ -868,7 +847,6 @@ const skills = [
       width: 80px;
       height: 80px;
       opacity: 0;
-      filter: drop-shadow(0 0 4px rgba(59, 130, 246, 0.15));
     }
 
     .doodle-2 {

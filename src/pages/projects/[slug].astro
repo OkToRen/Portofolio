@@ -27,15 +27,12 @@ const { project } = Astro.props;
 
     <!-- Header -->
     <header class="mb-12 pb-10 border-b border-border">
-      <div class="flex items-center gap-3 mb-4">
-        <span class="text-xs uppercase tracking-wider text-accent bg-accent/10 px-2.5 py-1 rounded-full font-semibold">
-          {project.status}
-        </span>
-        <span class="text-xs text-muted font-mono">{project.year}</span>
-      </div>
-
       <h1 class="text-primary font-display font-medium text-5xl md:text-6xl tracking-tight mb-4">{project.name}</h1>
       <p class="text-muted text-lg leading-relaxed max-w-2xl">{project.tagline}</p>
+      <p class="flex items-center gap-3 mt-4 text-sm">
+        <span class="text-accent font-semibold">{project.status}</span>
+        <span class="text-muted font-mono">{project.year}</span>
+      </p>
 
       {project.links.length > 0 && (
         <div class="flex flex-wrap gap-3 mt-8">
@@ -61,13 +58,13 @@ const { project } = Astro.props;
     <div class="grid md:grid-cols-3 gap-10 mb-14">
       <aside class="md:col-span-1 space-y-6">
         <div>
-          <h2 class="text-muted font-bold uppercase tracking-wider text-xs mb-2">Role</h2>
+          <h2 class="text-muted font-bold uppercase tracking-wider text-sm mb-2">Role</h2>
           <p class="text-primary text-sm">{project.role}</p>
         </div>
 
         {project.tech.length > 0 && (
           <div>
-            <h2 class="text-muted font-bold uppercase tracking-wider text-xs mb-3">Tech Stack</h2>
+            <h2 class="text-muted font-bold uppercase tracking-wider text-sm mb-3">Tech Stack</h2>
             <div class="flex flex-wrap gap-2">
               {project.tech.map((tag) => (
                 <span class="text-xs text-primary font-mono bg-surface border border-border rounded-full px-2.5 py-1">
@@ -80,13 +77,10 @@ const { project } = Astro.props;
 
         {project.highlights.length > 0 && (
           <div>
-            <h2 class="text-muted font-bold uppercase tracking-wider text-xs mb-3">Highlights</h2>
-            <ul class="space-y-2">
+            <h2 class="text-muted font-bold uppercase tracking-wider text-sm mb-3">Highlights</h2>
+            <ul class="list-disc pl-4 space-y-2 marker:text-accent">
               {project.highlights.map((item) => (
-                <li class="flex gap-2 text-sm text-muted leading-relaxed">
-                  <span class="text-accent mt-0.5">▸</span>
-                  <span>{item}</span>
-                </li>
+                <li class="text-sm text-muted leading-relaxed">{item}</li>
               ))}
             </ul>
           </div>
@@ -102,7 +96,7 @@ const { project } = Astro.props;
     {project.images && project.images.length > 0 && (
       <section class="mb-14">
         <div class="flex items-baseline justify-between mb-4">
-          <h2 class="text-muted font-bold uppercase tracking-wider text-xs">Gallery</h2>
+          <h2 class="text-muted font-bold uppercase tracking-wider text-sm">Gallery</h2>
           <span class="text-xs text-muted font-mono">{project.images.length} screenshots</span>
         </div>
         <div class="relative group/gallery">
@@ -130,7 +124,7 @@ const { project } = Astro.props;
             type="button"
             id="gallery-prev"
             aria-label="Scroll to previous screenshots"
-            class="hidden sm:flex absolute left-1 top-1/2 -mt-1.5 -translate-y-1/2 z-10 h-9 w-9 items-center justify-center rounded-full bg-surface/90 border border-border text-primary backdrop-blur shadow-md opacity-0 group-hover/gallery:opacity-100 group-focus-within/gallery:opacity-100 hover:border-accent hover:text-accent transition active:scale-[0.97] cursor-pointer"
+            class="hidden sm:flex absolute left-1 top-1/2 -mt-1.5 -translate-y-1/2 z-10 h-9 w-9 items-center justify-center rounded-full bg-surface border border-border text-primary opacity-0 group-hover/gallery:opacity-100 group-focus-within/gallery:opacity-100 hover:border-accent hover:text-accent transition active:scale-[0.97] cursor-pointer"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
           </button>
@@ -138,7 +132,7 @@ const { project } = Astro.props;
             type="button"
             id="gallery-next"
             aria-label="Scroll to next screenshots"
-            class="hidden sm:flex absolute right-1 top-1/2 -mt-1.5 -translate-y-1/2 z-10 h-9 w-9 items-center justify-center rounded-full bg-surface/90 border border-border text-primary backdrop-blur shadow-md opacity-0 group-hover/gallery:opacity-100 group-focus-within/gallery:opacity-100 hover:border-accent hover:text-accent transition active:scale-[0.97] cursor-pointer"
+            class="hidden sm:flex absolute right-1 top-1/2 -mt-1.5 -translate-y-1/2 z-10 h-9 w-9 items-center justify-center rounded-full bg-surface border border-border text-primary opacity-0 group-hover/gallery:opacity-100 group-focus-within/gallery:opacity-100 hover:border-accent hover:text-accent transition active:scale-[0.97] cursor-pointer"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
           </button>
@@ -152,10 +146,10 @@ const { project } = Astro.props;
         <section data-reveal>
           <h2 class="text-primary font-display font-medium text-3xl tracking-tight mb-5">{section.heading}</h2>
           {section.paragraphs?.map((para) => (
-            <p class="text-muted leading-relaxed text-base mb-4">{para}</p>
+            <p class="text-muted leading-relaxed text-base mb-4 max-w-[70ch]">{para}</p>
           ))}
           {section.bullets && (
-            <ul class="list-disc list-outside pl-5 space-y-2 text-muted leading-relaxed">
+            <ul class="list-disc list-outside pl-5 space-y-2 text-muted leading-relaxed max-w-[70ch]">
               {section.bullets.map((item) => (
                 <li>{item}</li>
               ))}
