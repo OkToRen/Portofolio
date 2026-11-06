@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import { projects } from '../data/projects';
+import { identity, personId } from '../data/identity';
 
 // Show featured projects on the home page (fall back to the first few).
 const featuredProjects = projects.filter((p) => p.featured);
@@ -72,7 +73,18 @@ const skills = [
 ];
 ---
 
-<Layout title={personal.name}>
+<Layout
+  title="Darren Haryanto | Computer Science student and developer"
+  type="profile"
+  schema={[{
+    '@type': 'ProfilePage',
+    '@id': `${identity.url}/#profile`,
+    url: identity.url,
+    name: 'Darren Haryanto',
+    mainEntity: { '@id': personId },
+    about: { '@id': personId },
+  }]}
+>
   <!-- Full-Screen Hero Section with Parallax -->
   <div class="hero-wrapper" id="hero-wrapper">
     <div class="hero-section" id="hero">
