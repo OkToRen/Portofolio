@@ -9,6 +9,8 @@ const google = fontProviders.google();
 
 // https://astro.build/config
 export default defineConfig({
+  // Absolute URLs for canonical links, link previews and the sitemap.
+  site: 'https://darrenharyanto.com',
   fonts: [
     {
       provider: google,
