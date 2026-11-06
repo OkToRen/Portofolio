@@ -1,16 +1,17 @@
-// Generates the brand assets in public/ from public/favicon.svg and the project data:
-//   favicon.ico, apple-touch-icon.png, icon-192.png, icon-512.png  (the DO mark)
-//   og/*.png                                                     (1200x630 link previews)
+// Generates the brand assets in public/:
+//   favicon.ico, apple-touch-icon.png, icon-192.png, icon-512.png  (from public/favicon.svg)
+//   og/*.jpg  1200x630 screenshots of each page, used as link previews
 //
-// Run with `npm run brand` after changing the mark or a project's name/tagline.
-// Needs a local Chrome (set CHROME_PATH if it isn't in the default place) and
-// network access for Google Fonts. The outputs are committed, so the deploy
-// build never runs this.
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+// Run with `npm run brand` after changing the mark or the look of a page. It
+// builds the site, serves it locally and photographs every page in the
+// sitemap. Needs a local Chrome (set CHROME_PATH if it isn't in the default
+// place). The outputs are committed, so the deploy build never runs this.
+import { readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { spawn, execSync } from 'node:child_process';
 import { chromium } from 'playwright-core';
-import { projects } from '../src/data/projects.ts';
 
 const root = new URL('../public/', import.meta.url);
+const cwd = new URL('..', import.meta.url);
 const chrome =
   process.env.CHROME_PATH ??
   (process.platform === 'win32'
@@ -63,64 +64,40 @@ sizes.forEach((s, i) => {
   offset += images[i].length;
 });
 writeFileSync(new URL('favicon.ico', root), Buffer.concat([header, ...images]));
+await page.close();
 
-// ---- Link previews ------------------------------------------------------
-const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// ---- Link previews: a photo of each page ----------------------------------
+const port = 4399;
+const base = `http://localhost:${port}`;
+execSync('npx astro build', { cwd, stdio: 'ignore' });
+const server = spawn('npx', ['astro', 'preview', '--port', String(port)], { cwd, shell: true, stdio: 'ignore' });
 
-function card({ eyebrow, title, lede }) {
-  return `<!doctype html><html><head>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..600&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=block" rel="stylesheet">
-<style>
-  :root{--bg:oklch(0.16 0.004 285);--ink:oklch(0.90 0.004 285);--muted:oklch(0.62 0.012 285);--accent:oklch(0.64 0.17 258);--rule:oklch(0.30 0.006 285)}
-  *{box-sizing:border-box;margin:0}
-  body{width:1200px;height:630px;background:var(--bg);color:var(--ink);font-family:"Inter Tight",sans-serif;position:relative;overflow:hidden}
-  .blob{position:absolute;border-radius:50%;filter:blur(90px);opacity:.34}
-  .b1{width:520px;height:520px;right:-140px;top:-200px;background:linear-gradient(135deg,#3b82f6,#1d4ed8)}
-  .b2{width:380px;height:380px;right:180px;bottom:-260px;background:linear-gradient(135deg,#06b6d4,#3b82f6)}
-  .b3{width:300px;height:300px;right:-80px;bottom:-60px;background:linear-gradient(135deg,#10b981,#06b6d4);opacity:.22}
-  main{position:absolute;inset:72px 80px;display:flex;flex-direction:column}
-  .eyebrow{font-family:"JetBrains Mono",monospace;font-size:24px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
-  h1{font-family:Fraunces,serif;font-weight:500;font-variation-settings:"opsz" 144;letter-spacing:-.025em;line-height:.95;margin-top:auto}
-  h1 .dot{color:var(--accent)}
-  .lede{font-size:38px;line-height:1.3;color:var(--muted);margin-top:28px;max-width:940px}
-  footer{display:flex;align-items:center;gap:20px;margin-top:auto;padding-top:36px;border-top:1px solid var(--rule)}
-  footer img{width:56px;height:56px}
-  footer b{font-weight:600;font-size:28px}
-  footer span{font-family:"JetBrains Mono",monospace;font-size:24px;color:var(--muted);margin-left:auto}
-</style></head><body>
-<div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
-<main>
-  ${eyebrow ? `<p class="eyebrow">${esc(eyebrow)}</p>` : ''}
-  <h1 style="font-size:${title.length > 12 ? 128 : 152}px">${esc(title)}<span class="dot">.</span></h1>
-  <p class="lede">${esc(lede)}</p>
-  <footer><img src="${dataUri(mark)}" alt=""><b>Darren Haryanto</b><span>darrenharyanto.com</span></footer>
-</main></body></html>`;
+try {
+  for (let i = 0; ; i++) {
+    try { if ((await fetch(base)).ok) break; } catch {}
+    if (i > 60) throw new Error('preview server did not start');
+    await new Promise((r) => setTimeout(r, 500));
+  }
+
+  const sitemap = await (await fetch(`${base}/sitemap.xml`)).text();
+  const paths = [...sitemap.matchAll(/<loc>https?:\/\/[^/]+([^<]*)<\/loc>/g)].map((m) => m[1] || '/');
+
+  const ctx = await browser.newContext({ viewport: { width: 1200, height: 630 }, colorScheme: 'dark' });
+  const shot = await ctx.newPage();
+  rmSync(new URL('og/', root), { recursive: true, force: true });
+  mkdirSync(new URL('og/', root), { recursive: true });
+  for (const path of paths) {
+    await shot.goto(base + path, { waitUntil: 'load' });
+    await shot.evaluate(() => document.fonts.ready);
+    // No pointer in a screenshot: hide the cursor effects.
+    await shot.addStyleTag({ content: '.cursor-ring,.cursor-spotlight{display:none!important}' });
+    await shot.waitForTimeout(1500); // let the entrance animations finish
+    const name = path === '/' ? 'home' : path.split('/').filter(Boolean).pop();
+    writeFileSync(new URL(`og/${name}.jpg`, root), await shot.screenshot({ type: 'jpeg', quality: 88 }));
+    console.log(`og/${name}.jpg  ${path}`);
+  }
+} finally {
+  if (process.platform === 'win32') execSync(`for /f "tokens=5" %p in ('netstat -ano ^| findstr :${port} ^| findstr LISTENING') do taskkill /F /PID %p`, { stdio: 'ignore', shell: 'cmd.exe' });
+  else server.kill();
+  await browser.close();
 }
-
-const cards = [
-  {
-    file: 'home',
-    eyebrow: 'Portfolio',
-    title: 'Darren Haryanto',
-    lede: 'Computer Science student at BINUS, working in Rust, C and the modern web.',
-  },
-  { file: 'projects', eyebrow: 'Projects', title: 'Projects', lede: "A selection of things I've built: mobile apps, tooling, and the web." },
-  { file: 'colophon', eyebrow: 'Colophon', title: 'Colophon', lede: "How this site is made: what it runs on, the type it's set in, and what didn't survive." },
-  ...projects.map((p) => ({
-    file: p.slug,
-    eyebrow: `Project · ${p.year} · ${p.status}`,
-    title: p.name,
-    lede: p.tagline,
-  })),
-];
-
-mkdirSync(new URL('og/', root), { recursive: true });
-await page.setViewportSize({ width: 1200, height: 630 });
-for (const c of cards) {
-  await page.setContent(card(c), { waitUntil: 'networkidle' });
-  await page.evaluate(() => document.fonts.ready);
-  writeFileSync(new URL(`og/${c.file}.png`, root), await page.screenshot({ type: 'png' }));
-  console.log(`og/${c.file}.png`);
-}
-
-await browser.close();

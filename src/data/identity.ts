@@ -35,7 +35,7 @@ export function personSchema() {
     additionalName: 'Oliver Putra',
     familyName: 'Haryanto',
     url: identity.url,
-    image: `${identity.url}/og/home.png`,
+    image: `${identity.url}/og/home.jpg`,
     email: `mailto:${identity.email}`,
     jobTitle: identity.jobTitle,
     description: identity.summary,
