@@ -67,10 +67,22 @@ const education = [
   }
 ];
 
-const skills = [
-  "Rust", "Golang", "C/C#", "Java", 
-  "React", "Next.js", "T-SQL", "PostgreSQL"
-];
+// The stack, read the way a stack is drawn: what people touch on top, the
+// machine at the bottom. Each skill lists the projects whose tech uses it,
+// matched on whole words so "C" never matches "CSS" and "Java" never
+// matches "JavaScript".
+const strata = [
+  { layer: 'Screen', note: 'What people touch', skills: ['React', 'Next.js', 'Astro', 'TypeScript'] },
+  { layer: 'Data', note: 'What it remembers', skills: ['PostgreSQL', 'T-SQL'] },
+  { layer: 'Runtime', note: 'Where the logic lives', skills: ['Java', 'C#', 'Go'] },
+  { layer: 'Metal', note: 'Closest to the machine', skills: ['Rust', 'C'] },
+].map((stratum) => ({
+  ...stratum,
+  skills: stratum.skills.map((name) => {
+    const word = new RegExp(`(^|[^\\w])${name.replace(/[.#+]/g, '\\$&')}($|[^\\w#+])`, 'i');
+    return { name, usedIn: projects.filter((p) => p.tech.some((t) => word.test(t))) };
+  }),
+}));
 ---
 
 <Layout
@@ -303,13 +315,28 @@ const skills = [
   <!-- Skills Section -->
   <section id="skills" class="mb-24 pb-16 border-b border-border">
     <h2 class="text-primary font-bold mb-8 uppercase tracking-wider text-sm">Technical Stack</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {skills.map((skill) => (
-        <div class="bg-surface border border-border hover:border-accent p-4 rounded-lg text-center text-sm font-medium transition-[translate,border-color,box-shadow] duration-200 ease-out hover:-translate-y-1 hover:shadow-lg">
-          {skill}
-        </div>
+    <ol class="strata" aria-label="Technical stack, from the screen down to the machine">
+      {strata.map((stratum, i) => (
+        <li class="stratum" style={`--depth: ${i}`}>
+          <div class="stratum-label">
+            <span class="stratum-layer">{stratum.layer}</span>
+            <span class="stratum-note">{stratum.note}</span>
+          </div>
+          <ul class="stratum-skills">
+            {stratum.skills.map((skill) => (
+              <li class="skill">
+                <span class="skill-name">{skill.name}</span>
+                {skill.usedIn.length > 0 && (
+                  <span class="skill-used">
+                    {skill.usedIn.map((p) => <a href={`/projects/${p.slug}`}>{p.name}</a>)}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </li>
       ))}
-    </div>
+    </ol>
   </section>
 
   <!-- Projects Section -->
@@ -812,6 +839,101 @@ const skills = [
   .portfolio-content section.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+
+  /* Technical stack as strata: each layer a shade deeper in the accent, the
+     names set large in the display serif. */
+  .strata {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+  }
+
+  .stratum {
+    display: grid;
+    grid-template-columns: 9.5rem 1fr;
+    gap: 1.5rem;
+    align-items: baseline;
+    padding: 1.75rem 1.75rem;
+    background: color-mix(in oklch, var(--color-accent) calc(var(--depth) * 5%), var(--color-surface));
+  }
+
+  .stratum + .stratum {
+    border-top: 1px solid color-mix(in oklch, var(--color-accent) calc(10% + var(--depth) * 5%), var(--color-border));
+  }
+
+  .stratum-label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stratum-layer {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+  }
+
+  .stratum-note {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+
+  .stratum-skills {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1.75rem;
+    row-gap: 1rem;
+  }
+
+  .skill {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .skill-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 1.2rem + 1.4vw, 2.25rem);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--color-primary);
+  }
+
+  .skill-used {
+    display: flex;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .skill-used a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.2s ease;
+  }
+
+  .skill-used a:hover,
+  .skill-used a:focus-visible {
+    text-decoration-color: currentColor;
+  }
+
+  @media (max-width: 640px) {
+    .stratum {
+      grid-template-columns: 1fr;
+      gap: 0.9rem;
+      padding: 1.25rem;
+    }
+
+    .stratum-skills {
+      column-gap: 1.5rem;
+    }
   }
 
   /* Reduced motion: no drift, no doodles, no travel. The content is simply
