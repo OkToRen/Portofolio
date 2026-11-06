@@ -1,0 +1,6 @@
+# darrenharyanto.com: everyone is welcome, search engines and AI agents included.
+# A plain-text summary for AI agents is at https://darrenharyanto.com/llms.txt
+User-agent: *
+Allow: /
+
+Sitemap: https://darrenharyanto.com/sitemap.xml
