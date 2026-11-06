@@ -89,8 +89,17 @@ try {
   for (const path of paths) {
     await shot.goto(base + path, { waitUntil: 'load' });
     await shot.evaluate(() => document.fonts.ready);
-    // No pointer in a screenshot: hide the cursor effects.
-    await shot.addStyleTag({ content: '.cursor-ring,.cursor-spotlight{display:none!important}' });
+    // No pointer in a screenshot: hide the cursor effects. The hero doodles
+    // draw in on staggered 11-17s loops, so any one moment catches one or two
+    // half-drawn; hold them fully drawn for the photo, minus the two that
+    // would sit on the name and role at this size.
+    await shot.addStyleTag({
+      content:
+        '.cursor-ring,.cursor-spotlight{display:none!important}' +
+        '.doodle-svg{animation:none!important;opacity:.6!important}' +
+        '.doodle-5,.doodle-6{display:none!important}' +
+        '.doodle-svg .doodle-path{animation:none!important;stroke-dashoffset:0!important}',
+    });
     await shot.waitForTimeout(1500); // let the entrance animations finish
     const name = path === '/' ? 'home' : path.split('/').filter(Boolean).pop();
     writeFileSync(new URL(`og/${name}.jpg`, root), await shot.screenshot({ type: 'jpeg', quality: 88 }));
