@@ -21,8 +21,19 @@ jobs:
   deploy:
     runs-on: self-hosted
     steps:
+      # Fetch the commit straight from this Gitea server instead of using
+      # actions/checkout, which the runner has to download from github.com
+      # first. The home server can't always reach GitHub, and when it can't,
+      # the deploy fails before it starts.
       - name: Checkout
-        uses: actions/checkout@v4
+        env:
+          TOKEN: ${{ gitea.token }}
+        run: |
+          git init -q .
+          git -c http.extraHeader="Authorization: Basic $(printf 'x:%s' "$TOKEN" | base64 -w0)" \
+            fetch -q --depth 1 "${{ gitea.server_url }}/${{ gitea.repository }}.git" "${{ gitea.ref }}"
+          git checkout -q FETCH_HEAD
+          git log -1 --oneline
 
       - name: Build image & (re)start container
         run: docker compose up -d --build
