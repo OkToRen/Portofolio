@@ -117,6 +117,79 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: 'dogi',
+    name: 'DoGi',
+    tagline: 'A travel planner for Indonesia: find destinations, lay out every day, take it with you.',
+    summary:
+      'DoGi is a travel-planning web app for trips across Indonesia. You browse curated destinations, drag activities onto a day-by-day calendar, then sync the plan to Google Calendar or export it as a PDF to share. It runs in English and Bahasa Indonesia, has tiered subscriptions with real checkout, and is self-hosted on a home server with its own CI pipeline.',
+    year: '2026',
+    role: 'Full-Stack Developer',
+    status: 'Live',
+    featured: true,
+    tech: ['Next.js 16', 'React 19', 'TypeScript', 'Tailwind CSS 4', 'Drizzle ORM', 'PostgreSQL', 'NextAuth'],
+    highlights: [
+      'Drag-and-drop itinerary planner on a day-by-day calendar',
+      'Google Calendar sync, .ics files, and PDF export',
+      'English and Bahasa Indonesia, routed per locale',
+      'Free, Silver, Gold and Platinum tiers with Mayar checkout',
+    ],
+    links: [{ label: 'Live site', href: 'https://dogi.darrenharyanto.com' }],
+    images: [
+      { src: '/screenshots/dogi/01-landing.jpg', alt: 'DoGi landing page: "Planning made easy with DoGi" over an aerial shot of manta rays in turquoise water' },
+      { src: '/screenshots/dogi/02-destinations.jpg', alt: 'Popular destinations: Bali, Labuan Bajo, Yogyakarta and Raja Ampat' },
+      { src: '/screenshots/dogi/03-features.jpg', alt: 'Features wheel with the itinerary planner selected' },
+      { src: '/screenshots/dogi/04-login.jpg', alt: 'Sign-in page with email and Google sign-in beside a photo of a Raja Ampat shoreline' },
+    ],
+    documentation: [
+      {
+        heading: 'Overview',
+        paragraphs: [
+          'DoGi is an all-in-one planner for travelling in Indonesia, from Sabang to Merauke. A trip starts from a curated destination or a blank itinerary, and every activity, meal, transfer and stay lands on a calendar grid you can rearrange by dragging.',
+          'When the plan is ready it leaves the app: it syncs to Google Calendar, downloads as an .ics file, or exports as a formatted PDF to send to the people coming along.',
+        ],
+      },
+      {
+        heading: 'Core features',
+        bullets: [
+          'Itinerary planner: a day-by-day calendar with drag and drop (dnd-kit), typed time and duration inputs, and a one-line quick add for ideas and events.',
+          'Destinations: a curated catalogue with detail pages, maps (Leaflet over CARTO basemaps), and an admin editor for destinations.',
+          'Calendar sync and export: Google Calendar through the Google APIs, .ics files, and PDF export with react-pdf.',
+          'AI trip planner: a draft, refine and save flow that turns a trip request into a structured itinerary, behind a pluggable model provider with daily quotas per tier.',
+          'Dashboard: upcoming and past trips, days travelled, profile and settings.',
+        ],
+      },
+      {
+        heading: 'Accounts and subscriptions',
+        bullets: [
+          'NextAuth v5 with email and password (bcrypt) or Google sign-in, and an email verification flow sent through Resend.',
+          'Free, Silver, Gold and Platinum tiers, each with its own limits on trips, trip length, ideas and AI drafts.',
+          'Payments through Mayar checkout, with a webhook that upgrades the account once the payment clears.',
+        ],
+      },
+      {
+        heading: 'Tech stack',
+        bullets: [
+          'Next.js 16 (App Router) with React 19, TypeScript and Tailwind CSS 4.',
+          'Drizzle ORM over Neon serverless PostgreSQL, with migrations from drizzle-kit.',
+          'next-intl for English and Bahasa Indonesia routing.',
+          'Lenis and Framer Motion for scrolling and motion.',
+        ],
+      },
+      {
+        heading: 'Deployment',
+        paragraphs: [
+          'DoGi runs as a Docker container on a self-hosted server. A Gitea Actions workflow builds the image, pushes the database schema with drizzle-kit, and restarts the app on every push, with NextAuth configured to trust the reverse proxy in front of it.',
+        ],
+      },
+      {
+        heading: 'My role',
+        paragraphs: [
+          'I built DoGi end to end: the data model, authentication, the planner, calendar sync and PDF export, subscriptions and payments, the AI trip planner, and the self-hosted deployment. A teammate contributed early dashboard and planner interface work.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'hirescope',
     name: 'HireScope',
     tagline: 'An IT career-intelligence dashboard for the Indonesian job market.',
