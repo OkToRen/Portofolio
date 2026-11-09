@@ -1,6 +1,6 @@
 ---
 import { createHash } from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { Font } from 'astro:assets';
 import 'lenis/dist/lenis.css';
@@ -25,11 +25,12 @@ const canonical = new URL(Astro.url.pathname.replace(/\/$/, '') || '/', Astro.si
 // Version the preview URL by the image's contents. Cloudflare and the chat
 // apps cache whatever they first got for a URL (a 404 included), so a new
 // screenshot needs a new URL to be seen.
-const ogVersion = createHash('sha1')
-	.update(readFileSync(join(process.cwd(), 'public', 'og', `${og}.jpg`)))
-	.digest('hex')
-	.slice(0, 8);
-const image = new URL(`/og/${og}.jpg?v=${ogVersion}`, Astro.site).href;
+// A page added since the last `npm run brand` has no screenshot yet, so it
+// borrows the home one until the next run.
+const ogPath = (name: string) => join(process.cwd(), 'public', 'og', `${name}.jpg`);
+const ogName = existsSync(ogPath(og)) ? og : 'home';
+const ogVersion = createHash('sha1').update(readFileSync(ogPath(ogName))).digest('hex').slice(0, 8);
+const image = new URL(`/og/${ogName}.jpg?v=${ogVersion}`, Astro.site).href;
 const imageAlt = `Screenshot of ${title} on darrenharyanto.com`;
 
 const graph = {
