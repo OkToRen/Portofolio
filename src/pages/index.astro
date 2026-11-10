@@ -284,8 +284,8 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
 
   <!-- About Section -->
   <section id="about" class="mb-24 pb-16 border-b border-border">
-    <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">About</h2>
-    <p class="text-muted leading-relaxed text-lg max-w-[65ch]">
+    <h2 data-reveal class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">About</h2>
+    <p data-reveal class="text-muted leading-relaxed text-lg max-w-[65ch]">
       Computer Science student and Laboratory Assistant with a strong passion for coding. 
       Experienced in low-level languages like <span class="text-primary font-semibold">Rust</span> and <span class="text-primary font-semibold">C</span>, 
       as well as modern web development. Accustomed to teaching, collaboration, and managing 
@@ -295,10 +295,10 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
 
   <!-- Experience Section -->
   <section id="experience" class="mb-24 pb-16 border-b border-border">
-    <h2 class="text-primary font-bold mb-8 uppercase tracking-wider text-sm">Experience</h2>
+    <h2 data-reveal class="text-primary font-bold mb-8 uppercase tracking-wider text-sm">Experience</h2>
     <div class="space-y-12">
       {experience.map((job) => (
-        <div class="group relative pl-6 border-l-2 border-border hover:border-accent transition-colors duration-300">
+        <div data-reveal class="group relative pl-6 border-l-2 border-border hover:border-accent transition-colors duration-300">
           <div class="absolute -left-[9px] top-0 h-4 w-4 rounded-full bg-surface border-2 border-border group-hover:border-accent group-hover:bg-accent transition-colors duration-300"></div>
           <div class="flex flex-col sm:flex-row sm:justify-between sm:items-baseline mb-3">
             <h3 class="text-primary font-semibold text-lg">{job.role}</h3>
@@ -317,14 +317,14 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
 
   <!-- Skills Section -->
   <section id="skills" class="mb-24 pb-16 border-b border-border">
-    <h2 class="text-primary font-bold mb-8 uppercase tracking-wider text-sm">Technical Stack</h2>
-    <div class="stack-picks" hidden>
+    <h2 data-reveal class="text-primary font-bold mb-8 uppercase tracking-wider text-sm">Technical Stack</h2>
+    <div class="stack-picks" data-reveal hidden>
       <span class="stack-picks-label">See what a project is made of</span>
       {stackProjects.map((p) => (
         <button type="button" class="stack-pick" data-project={p.slug} aria-pressed="false">{p.name}</button>
       ))}
     </div>
-    <ol class="strata" aria-label="Technical stack, from the screen down to the machine">
+    <ol class="strata" data-reveal aria-label="Technical stack, from the screen down to the machine">
       {strata.map((stratum, i) => (
         <li class="stratum" style={`--depth: ${i}`}>
           <span class="stratum-layer" title={stratum.note}>{stratum.layer}</span>
@@ -340,7 +340,7 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
 
   <!-- Projects Section -->
   <section id="projects" class="mb-24 pb-16 border-b border-border">
-    <div class="flex items-center justify-between mb-8">
+    <div data-reveal class="flex items-center justify-between mb-8">
       <h2 class="text-primary font-bold uppercase tracking-wider text-sm">Selected Projects</h2>
       <a href="/projects" class="text-xs text-accent hover:underline font-medium inline-flex items-center gap-1">
         View all
@@ -354,6 +354,7 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
         <a
           href={`/projects/${project.slug}`}
           data-tilt
+          data-reveal
           class="group flex flex-col bg-surface border border-border hover:border-accent rounded-lg p-6 hover:shadow-xl"
         >
           <div class="flex items-start justify-between gap-3 mb-3">
@@ -374,7 +375,7 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
 
   <!-- Education & Organization Section -->
   <section class="grid md:grid-cols-2 gap-12 mb-24 pb-16">
-    <div class="bg-surface border border-border rounded-lg p-8">
+    <div data-reveal class="bg-surface border border-border rounded-lg p-8">
       <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">Education</h2>
       {education.map((edu) => (
         <div class="mb-8 last:mb-0">
@@ -388,7 +389,7 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
       ))}
     </div>
     
-    <div class="bg-surface border border-border rounded-lg p-8">
+    <div data-reveal class="bg-surface border border-border rounded-lg p-8">
       <h2 class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">Organization</h2>
       <div class="mb-8">
         <h3 class="text-primary font-semibold text-lg">Ureeka Alam Sutera</h3>
@@ -828,18 +829,6 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
     transform: translateY(0);
   }
   
-  /* Section animations */
-  .portfolio-content section {
-    opacity: 0;
-    transform: translateY(16px);
-    transition: opacity 0.5s var(--ease-out), transform 0.5s var(--ease-out);
-  }
-
-  .portfolio-content section.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
   /* Technical stack as a cascade: one line per layer, each stepping further
      in and set larger, so the stack sinks from what people touch down to the
      machine. No boxes, no rows of cells; type and indentation carry it. */
@@ -957,21 +946,21 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
     color: color-mix(in oklch, var(--color-primary) 22%, transparent);
   }
 
-  /* The layers sink into place top to bottom when the section arrives. */
-  .portfolio-content section .stratum {
+  /* The layers sink into place top to bottom when the cascade arrives. */
+  .strata .stratum {
     opacity: 0;
     transform: translateY(14px);
     transition: opacity 460ms var(--ease-out), transform 460ms var(--ease-out);
     transition-delay: calc(var(--depth) * 80ms + 120ms);
   }
 
-  .portfolio-content section.visible .stratum {
+  .strata.is-visible .stratum {
     opacity: 1;
     transform: none;
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .portfolio-content section .stratum {
+    .strata .stratum {
       opacity: 1;
       transform: none;
       transition: none;
@@ -1141,27 +1130,6 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
   
   // Initial call
   handleScroll();
-  
-  // Intersection Observer for sections with staggered animations
-  const sections = document.querySelectorAll('.portfolio-content section');
-  const sectionObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry, index) => {
-        if (entry.isIntersecting) {
-          // Stagger the animation for a smoother effect
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, index * 60);
-        }
-      });
-    },
-    { 
-      threshold: 0.1, 
-      rootMargin: '0px 0px -50px 0px' 
-    }
-  );
-  
-  sections.forEach((section) => sectionObserver.observe(section));
   
   // Smooth scroll on prompt click
   const scrollPrompt = document.querySelector('.scroll-prompt');

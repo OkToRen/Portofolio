@@ -478,7 +478,7 @@ const graph = {
 				entries.forEach((entry, i) => {
 					if (entry.isIntersecting) {
 						const el = entry.target as HTMLElement;
-						el.style.transitionDelay = `${Math.min(i * 60, 240)}ms`;
+						el.style.setProperty('--reveal-delay', `${Math.min(i * 90, 360)}ms`);
 						el.classList.add('is-visible');
 						revealObserver.unobserve(el);
 					}
