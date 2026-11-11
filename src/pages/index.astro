@@ -296,7 +296,7 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
         technical teams.
       </p>
     </div>
-    <div class="about-photo-tilt" data-tilt="10">
+    <div class="about-photo-tilt" data-tilt="26" data-tilt-perspective="650">
       <figure data-reveal="photo" class="about-photo">
         <Picture
           src={portrait}
@@ -904,11 +904,10 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
   .about-photo-tilt {
     width: min(75vw, 18rem);
     border-radius: 0.75rem;
-    transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
-  }
-
-  .about-photo-tilt:hover {
-    box-shadow: 0 24px 48px -24px oklch(0 0 0 / 0.45);
+    transition:
+      transform 0.4s var(--ease-out),
+      scale 0.4s var(--ease-out),
+      box-shadow 0.4s var(--ease-out);
   }
 
   .about-photo {
@@ -935,13 +934,33 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
     inset: 0;
     pointer-events: none;
     opacity: 0;
-    background: radial-gradient(circle at var(--gx, 50%) var(--gy, 30%), oklch(1 0 0 / 0.28), transparent 60%);
+    background: radial-gradient(circle at var(--gx, 50%) var(--gy, 30%), oklch(1 0 0 / 0.45), transparent 55%);
     transition: opacity 0.4s ease;
   }
 
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
     .about-photo-tilt:hover .about-photo-glare {
       opacity: 1;
+    }
+
+    /* Picked up: the print lifts toward the viewer, its shadow falls away
+       from the pointer like light from above it, and the picture slides
+       slightly against the frame so it has depth behind the glass. */
+    .about-photo-tilt:hover {
+      scale: 1.04;
+      box-shadow:
+        calc(var(--tx, 0) * -48px) calc(var(--ty, 0) * -48px + 36px) 64px -20px oklch(0 0 0 / 0.55);
+    }
+
+    .about-photo-tilt .about-photo :global(img) {
+      transition:
+        scale 1200ms var(--reveal-ease) var(--reveal-delay, 0ms),
+        translate 0.4s var(--ease-out);
+    }
+
+    .about-photo-tilt:hover .about-photo :global(img) {
+      translate: calc(var(--tx, 0) * -14px) calc(var(--ty, 0) * -14px);
+      scale: 1.06;
     }
   }
 
