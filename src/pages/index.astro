@@ -1,6 +1,8 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
+import { Picture } from 'astro:assets';
+import portrait from '../assets/darren-portrait.jpg';
 import { projects } from '../data/projects';
 import { publications } from '../data/publications';
 import { identity, personId } from '../data/identity';
@@ -284,14 +286,27 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
   <div class="portfolio-content" id="content">
 
   <!-- About Section -->
-  <section id="about" class="mb-24 pb-16 border-b border-border">
-    <h2 data-reveal="line" class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">About</h2>
-    <p data-reveal class="text-muted leading-relaxed text-lg max-w-[65ch]">
-      Computer Science student and Laboratory Assistant with a strong passion for coding. 
-      Experienced in low-level languages like <span class="text-primary font-semibold">Rust</span> and <span class="text-primary font-semibold">C</span>, 
-      as well as modern web development. Accustomed to teaching, collaboration, and managing 
-      technical teams.
-    </p>
+  <section id="about" class="about mb-24 pb-16 border-b border-border">
+    <div>
+      <h2 data-reveal="line" class="text-primary font-bold mb-6 uppercase tracking-wider text-sm">About</h2>
+      <p data-reveal class="text-muted leading-relaxed text-lg max-w-[65ch]">
+        Computer Science student and Laboratory Assistant with a strong passion for coding.
+        Experienced in low-level languages like <span class="text-primary font-semibold">Rust</span> and <span class="text-primary font-semibold">C</span>,
+        as well as modern web development. Accustomed to teaching, collaboration, and managing
+        technical teams.
+      </p>
+    </div>
+    <figure data-reveal="photo" class="about-photo">
+      <Picture
+        src={portrait}
+        formats={['avif', 'webp']}
+        widths={[320, 480, 640, 900]}
+        sizes="(min-width: 768px) 288px, 75vw"
+        alt="Darren Haryanto smiling, wearing glasses and a pink, green and blue batik shirt"
+        loading="eager"
+        decoding="async"
+      />
+    </figure>
   </section>
 
   <!-- Experience Section -->
@@ -872,6 +887,38 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
     transform: translateY(0);
   }
   
+  /* About: the text and a portrait side by side. The studio backdrop is
+     light grey, so the frame keeps that colour behind the image while it
+     loads and gets a hairline border to hold its edge on the dark theme. */
+  .about {
+    display: grid;
+    gap: 2.5rem;
+  }
+
+  .about-photo {
+    width: min(75vw, 18rem);
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-border);
+    background: oklch(0.91 0.002 285);
+  }
+
+  .about-photo :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (min-width: 768px) {
+    .about {
+      grid-template-columns: minmax(0, 1fr) 18rem;
+      align-items: center;
+      gap: 4rem;
+    }
+  }
+
   /* Technical stack as a cascade: one line per layer, each stepping further
      in and set larger, so the stack sinks from what people touch down to the
      machine. No boxes, no rows of cells; type and indentation carry it. */
