@@ -2,7 +2,7 @@ import type { APIRoute } from 'astro';
 import { projects } from '../data/projects';
 import { site } from '../data/site';
 
-const paths = ['/', '/projects', ...projects.map((p) => `/projects/${p.slug}`), '/colophon'];
+const paths = ['/', '/projects', ...projects.map((p) => `/projects/${p.slug}`), '/publications', '/colophon'];
 
 export const GET: APIRoute = ({ site: base }) => {
   const urls = paths
