@@ -57,6 +57,11 @@ const experience = [
 const education = [
   {
     school: "Universitas Bina Nusantara",
+    degree: "Master of Computer Science",
+    date: "2026 - 2028 (Expected)",
+  },
+  {
+    school: "Universitas Bina Nusantara",
     degree: "Bachelor of Computer Science",
     date: "2023 - 2027 (Expected)",
     gpa: "3.82/4.00",
@@ -444,7 +449,7 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
           <p class="text-muted mt-1">{edu.degree}</p>
           <div class="flex justify-between items-center mt-3">
             <span class="text-xs text-muted">{edu.date}</span>
-            <span class="text-xs text-accent bg-accent/10 px-3 py-1 rounded-full font-semibold">{edu.gpa}</span>
+            {edu.gpa && <span class="text-xs text-accent bg-accent/10 px-3 py-1 rounded-full font-semibold">{edu.gpa}</span>}
           </div>
         </div>
       ))}

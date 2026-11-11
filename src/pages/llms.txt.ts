@@ -11,7 +11,7 @@ export const GET: APIRoute = () => {
 
 > ${fullName}: ${identity.summary}
 
-${name} (full name ${fullName}, GitHub handle OkToRen) is based in Tangerang, Indonesia. ${name} is studying for a Bachelor of Computer Science at Universitas Bina Nusantara (BINUS University), 2023 to 2027, and has worked at BINUS Alam Sutera as ${identity.jobTitle} since January 2026, after working as a software lab assistant there from September 2024.
+${name} (full name ${fullName}, GitHub handle OkToRen) is based in Tangerang, Indonesia. ${name} is studying for a Bachelor of Computer Science (2023 to 2027) and a Master of Computer Science (2026 to 2028) at Universitas Bina Nusantara (BINUS University), and has worked at BINUS Alam Sutera as ${identity.jobTitle} since January 2026, after working as a software lab assistant there from September 2024.
 
 Skills: ${identity.skills.join(', ')}.
 
