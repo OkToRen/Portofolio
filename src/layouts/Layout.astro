@@ -424,15 +424,22 @@ const graph = {
 	// Respect the user's motion preference for all decorative interactions.
 	const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-	// Subtle pointer-driven tilt on cards marked [data-tilt].
+	// Pointer-driven tilt on elements marked [data-tilt]. The attribute's value
+	// is the maximum angle in degrees; bare [data-tilt] cards keep 1.5, so they
+	// barely drag with the pointer. --gx/--gy give a glare layer the pointer
+	// position as a percentage. Mouse and pen only: on touch it would fire
+	// mid-scroll.
 	if (!prefersReducedMotion) {
 		document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
-			const MAX = 1.5; // degrees — kept minimal so cards barely drag with the pointer
+			const MAX = parseFloat(card.dataset.tilt || '') || 1.5;
 			card.addEventListener('pointermove', (e) => {
+				if (e.pointerType === 'touch') return;
 				const r = card.getBoundingClientRect();
 				const px = (e.clientX - r.left) / r.width - 0.5;
 				const py = (e.clientY - r.top) / r.height - 0.5;
 				card.style.transform = `perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateY(-2px)`;
+				card.style.setProperty('--gx', `${((px + 0.5) * 100).toFixed(1)}%`);
+				card.style.setProperty('--gy', `${((py + 0.5) * 100).toFixed(1)}%`);
 			});
 			card.addEventListener('pointerleave', () => {
 				card.style.transform = '';
@@ -485,7 +492,7 @@ const graph = {
 				// 4 · ring — visible on move, accent + grown over interactive els
 				if (ring) {
 					ring.classList.add('is-visible');
-					const interactive = el.closest('a, button, [data-tilt], input, label, [role="button"]');
+					const interactive = el.closest('a, button, input, label, [role="button"]');
 					ring.classList.toggle('is-interactive', !!interactive);
 				}
 

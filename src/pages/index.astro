@@ -296,17 +296,20 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
         technical teams.
       </p>
     </div>
-    <figure data-reveal="photo" class="about-photo">
-      <Picture
-        src={portrait}
-        formats={['avif', 'webp']}
-        widths={[320, 480, 640, 900]}
-        sizes="(min-width: 768px) 288px, 75vw"
-        alt="Darren Haryanto smiling, wearing glasses and a pink, green and blue batik shirt"
-        loading="eager"
-        decoding="async"
-      />
-    </figure>
+    <div class="about-photo-tilt" data-tilt="10">
+      <figure data-reveal="photo" class="about-photo">
+        <Picture
+          src={portrait}
+          formats={['avif', 'webp']}
+          widths={[320, 480, 640, 900]}
+          sizes="(min-width: 768px) 288px, 75vw"
+          alt="Darren Haryanto smiling, wearing glasses and a pink, green and blue batik shirt"
+          loading="eager"
+          decoding="async"
+        />
+        <span class="about-photo-glare" aria-hidden="true"></span>
+      </figure>
+    </div>
   </section>
 
   <!-- Experience Section -->
@@ -895,8 +898,22 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
     gap: 2.5rem;
   }
 
-  .about-photo {
+  /* The tilt sits on a wrapper so its transform never collides with the
+     figure's clip-path reveal. It is sized to the photo so the pointer maps
+     onto the picture, not onto the empty column beside it on phones. */
+  .about-photo-tilt {
     width: min(75vw, 18rem);
+    border-radius: 0.75rem;
+    transition: transform 0.5s var(--ease-out), box-shadow 0.5s var(--ease-out);
+  }
+
+  .about-photo-tilt:hover {
+    box-shadow: 0 24px 48px -24px oklch(0 0 0 / 0.45);
+  }
+
+  .about-photo {
+    position: relative;
+    width: 100%;
     aspect-ratio: 4 / 5;
     overflow: hidden;
     border-radius: 0.75rem;
@@ -909,6 +926,23 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* A soft light that follows the pointer across the print, so the tilt
+     reads as a physical photo catching the light. */
+  .about-photo-glare {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(circle at var(--gx, 50%) var(--gy, 30%), oklch(1 0 0 / 0.28), transparent 60%);
+    transition: opacity 0.4s ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .about-photo-tilt:hover .about-photo-glare {
+      opacity: 1;
+    }
   }
 
   @media (min-width: 768px) {
