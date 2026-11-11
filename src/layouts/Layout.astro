@@ -427,19 +427,23 @@ const graph = {
 	// Pointer-driven tilt on elements marked [data-tilt]. The attribute's value
 	// is the maximum angle in degrees; bare [data-tilt] cards keep 1.5, so they
 	// barely drag with the pointer. --gx/--gy give a glare layer the pointer
-	// position as a percentage. Mouse and pen only: on touch it would fire
-	// mid-scroll.
+	// position as a percentage, and --tx/--ty as -0.5..0.5 for shadows and
+	// parallax. data-tilt-perspective shortens the lens for a stronger 3D
+	// look. Mouse and pen only: on touch it would fire mid-scroll.
 	if (!prefersReducedMotion) {
 		document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((card) => {
 			const MAX = parseFloat(card.dataset.tilt || '') || 1.5;
+			const LENS = parseFloat(card.dataset.tiltPerspective || '') || 900;
 			card.addEventListener('pointermove', (e) => {
 				if (e.pointerType === 'touch') return;
 				const r = card.getBoundingClientRect();
 				const px = (e.clientX - r.left) / r.width - 0.5;
 				const py = (e.clientY - r.top) / r.height - 0.5;
-				card.style.transform = `perspective(900px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateY(-2px)`;
+				card.style.transform = `perspective(${LENS}px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateY(-2px)`;
 				card.style.setProperty('--gx', `${((px + 0.5) * 100).toFixed(1)}%`);
 				card.style.setProperty('--gy', `${((py + 0.5) * 100).toFixed(1)}%`);
+				card.style.setProperty('--tx', px.toFixed(3));
+				card.style.setProperty('--ty', py.toFixed(3));
 			});
 			card.addEventListener('pointerleave', () => {
 				card.style.transform = '';
