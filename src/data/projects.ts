@@ -311,6 +311,64 @@ export const projects: Project[] = [
     ],
   },
   {
+    slug: 'survace',
+    name: 'SurVace',
+    tagline: 'A short-video platform where a few seconds of recorded sound finds the video it came from.',
+    summary:
+      'SurVace is a short-video social platform built as Go microservices behind gRPC-Web, with a React and TypeScript frontend. People sign up, upload through a creator studio, follow, like, comment, bookmark and chat in real time. Its standout feature is ShaVam, a Shazam-style search: record a few seconds of sound in the browser and SurVace fingerprints it and finds the video whose soundtrack it matches.',
+    year: '2025',
+    role: 'Solo Developer',
+    status: 'Completed',
+    featured: true,
+    tech: ['Go', 'gRPC', 'React', 'TypeScript', 'Python', 'PostgreSQL', 'NATS', 'MinIO', 'Docker'],
+    highlights: [
+      'Four Go microservices (users, videos, chat, AI) speaking gRPC, reached from the browser through an Envoy gRPC-Web proxy',
+      'ShaVam audio search: spectrogram-peak fingerprints in Python match a recorded clip against every video soundtrack',
+      'Real-time chat over the NATS message broker',
+      'PASETO access and refresh tokens, Google sign-in, email verification and password reset',
+      'The whole stack, from Postgres and MinIO to NATS and Envoy, starts with one docker compose command',
+    ],
+    links: [],
+    documentation: [
+      {
+        heading: 'Overview',
+        paragraphs: [
+          'SurVace is a short-video social platform. Visitors can browse the feed and search, and signed-in users upload videos through a creator studio, follow other creators, like, comment, bookmark, and message each other in real time.',
+          'Search works two ways. Typing a query ranks videos by how closely their titles match, using Jaro string similarity, so near misses still find the right video. Recording a few seconds of sound in the browser, or uploading an audio file, runs ShaVam, which identifies the video the sound comes from.',
+        ],
+      },
+      {
+        heading: 'ShaVam: finding a video by its sound',
+        paragraphs: [
+          'ShaVam is a small audio-fingerprinting service in Python, served with FastAPI. When a video is uploaded, ffmpeg extracts its soundtrack, and ShaVam turns it into a spectrogram with librosa, keeps the local peaks that stand out from their neighbourhood, and hashes pairs of nearby peaks together with the time between them. Those hashes are stored in PostgreSQL against the video.',
+          'A search clip goes through the same steps, and its hashes are compared with every stored soundtrack. The video with the strongest agreement above a similarity threshold is returned as the match. Pairing peaks makes the fingerprint robust to noise and to where in the song the clip starts.',
+        ],
+      },
+      {
+        heading: 'Architecture',
+        bullets: [
+          'User service: accounts, bcrypt password hashing, PASETO access and refresh tokens, Google sign-in, and verification and reset emails over SMTP.',
+          'Video service: uploads stored in MinIO object storage, the feed, title search, and likes, comments, bookmarks and follows in PostgreSQL through GORM.',
+          'Chat service: one-to-one messaging delivered over NATS.',
+          'AI service: a gRPC front for ShaVam, so the browser reaches audio search the same way as everything else.',
+          'Protocol buffers define every service once; Go servers and TypeScript clients are generated from the same .proto files, and Envoy translates the browser’s gRPC-Web calls.',
+        ],
+      },
+      {
+        heading: 'Running it',
+        paragraphs: [
+          'Everything runs in Docker Compose: the four Go services with hot reload through Air, the FastAPI audio service, PostgreSQL, MinIO, NATS, Memcached, Envoy and the Vite frontend. One docker compose up builds and starts the whole platform locally, and the API is documented as a Postman collection.',
+        ],
+      },
+      {
+        heading: 'My role',
+        paragraphs: [
+          'I designed and built SurVace on my own between June and July 2025: the service boundaries and protobuf contracts, each Go service, the audio-fingerprinting service, and the React frontend. In November 2026 I came back to it to fix the Compose setup so the full stack starts cleanly with a single command.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'portfolio',
     name: 'Portfolio',
     tagline: 'This site, a personal portfolio built with Astro and Tailwind CSS.',
