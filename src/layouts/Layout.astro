@@ -101,6 +101,7 @@ const graph = {
 		<Font cssVariable="--font-jetbrains-mono" preload />
 		<!-- Runs before first paint so a light-mode visitor never sees the dark default -->
 		<script is:inline>
+			document.documentElement.classList.add('js');
 			(() => {
 				let theme = null;
 				try { theme = localStorage.getItem('theme'); } catch {}
@@ -473,18 +474,25 @@ const graph = {
 	// Staggered scroll reveal for elements marked [data-reveal].
 	const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
 	if (revealEls.length) {
+		// Number each cascade's children so they can follow one another in.
+		revealEls.forEach((el) => {
+			if (el.dataset.reveal !== 'cascade') return;
+			Array.from(el.children).forEach((child, i) => (child as HTMLElement).style.setProperty('--i', String(i)));
+		});
 		const revealObserver = new IntersectionObserver(
 			(entries) => {
-				entries.forEach((entry, i) => {
-					if (entry.isIntersecting) {
-						const el = entry.target as HTMLElement;
-						el.style.transitionDelay = `${Math.min(i * 60, 240)}ms`;
-						el.classList.add('is-visible');
-						revealObserver.unobserve(el);
-					}
+				// Stagger only what arrives together, in reading order.
+				const arriving = entries
+					.filter((entry) => entry.isIntersecting)
+					.map((entry) => entry.target as HTMLElement)
+					.sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
+				arriving.forEach((el, i) => {
+					el.style.setProperty('--reveal-delay', `${Math.min(i * 70, 280)}ms`);
+					el.classList.add('is-visible');
+					revealObserver.unobserve(el);
 				});
 			},
-			{ threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+			{ threshold: 0, rootMargin: '0px 0px -8% 0px' }
 		);
 		revealEls.forEach((el) => revealObserver.observe(el));
 	}

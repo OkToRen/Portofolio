@@ -166,7 +166,7 @@ const schema = [
     <!-- Documentation -->
     <div class="space-y-12">
       {project.documentation.map((section) => (
-        <section data-reveal>
+        <section data-reveal="cascade">
           <h2 class="text-primary font-display font-medium text-3xl tracking-tight mb-5">{section.heading}</h2>
           {section.paragraphs?.map((para) => (
             <p class="text-muted leading-relaxed text-base mb-4 max-w-[70ch]">{para}</p>
