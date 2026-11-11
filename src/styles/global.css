@@ -239,6 +239,47 @@ body::before {
   opacity: 0.9;
 }
 
+/* Held mouse button: the ring tightens, so the press is felt before release. */
+.cursor-ring.is-pressed .cursor-ring__inner {
+  transform: scale(0.6);
+  opacity: 1;
+  transition-duration: 0.12s;
+}
+
+.cursor-ring.is-interactive.is-pressed .cursor-ring__inner {
+  transform: scale(1.15);
+}
+
+/* 7 · Laser trail canvas, drawn by JS. Screen-blended in dark mode so the
+   streak glows; normal blending in light mode so it still shows. */
+.cursor-laser {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9997;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.light .cursor-laser {
+  mix-blend-mode: normal;
+}
+
+/* Click ripple, a single ring that opens from the click point (WAAPI). */
+.click-ripple {
+  position: fixed;
+  width: 64px;
+  height: 64px;
+  z-index: 9997;
+  pointer-events: none;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  background: radial-gradient(circle closest-side, color-mix(in oklch, var(--color-accent) 22%, transparent), transparent);
+  box-shadow: 0 0 14px color-mix(in oklch, var(--color-accent) 50%, transparent);
+  opacity: 0;
+}
+
 /* 5 · Content-only glow — screen-blends a dim accent pool onto the dark
    paper; multiply in light mode so it still reads faintly. */
 .cursor-spotlight {
@@ -280,14 +321,17 @@ body::before {
 /* Fine-pointer only; nothing decorative for touch or reduced-motion. */
 @media (hover: none), (pointer: coarse) {
   .cursor-ring,
-  .cursor-spotlight {
+  .cursor-spotlight,
+  .cursor-laser {
     display: none;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .cursor-ring,
-  .cursor-spotlight {
+  .cursor-spotlight,
+  .cursor-laser,
+  .click-ripple {
     display: none;
   }
 }
