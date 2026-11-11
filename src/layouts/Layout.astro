@@ -102,6 +102,11 @@ const graph = {
 		<!-- Runs before first paint so a light-mode visitor never sees the dark default -->
 		<script is:inline>
 			document.documentElement.classList.add('js');
+			// Safety net: if the reveal script hasn't started two seconds after
+			// the page is parsed, drop the hidden state and show everything.
+			document.addEventListener('DOMContentLoaded', () =>
+				setTimeout(() => { if (!window.__revealReady) document.documentElement.classList.remove('js'); }, 2000)
+			);
 			(() => {
 				let theme = null;
 				try { theme = localStorage.getItem('theme'); } catch {}
@@ -227,6 +232,42 @@ const graph = {
 				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
 			</button>
 		</div>
+		<!-- Scroll reveal. Inline, so it runs as soon as the HTML is parsed,
+		     with no download and no dependency on the bundled script: a stale
+		     cached page pointing at an old bundle, or a script error elsewhere,
+		     can no longer leave the text hidden. -->
+		<script is:inline>
+			(() => {
+				const root = document.documentElement;
+				const els = document.querySelectorAll('[data-reveal]');
+				if (!('IntersectionObserver' in window)) {
+					root.classList.remove('js');
+					return;
+				}
+				// Number each cascade's children so they can follow one another in.
+				els.forEach((el) => {
+					if (el.dataset.reveal !== 'cascade') return;
+					Array.from(el.children).forEach((child, i) => child.style.setProperty('--i', String(i)));
+				});
+				const io = new IntersectionObserver(
+					(entries) => {
+						// Stagger only what arrives together, in reading order.
+						entries
+							.filter((entry) => entry.isIntersecting)
+							.map((entry) => entry.target)
+							.sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1))
+							.forEach((el, i) => {
+								el.style.setProperty('--reveal-delay', Math.min(i * 70, 280) + 'ms');
+								el.classList.add('is-visible');
+								io.unobserve(el);
+							});
+					},
+					{ threshold: 0, rootMargin: '0px 0px -8% 0px' }
+				);
+				els.forEach((el) => io.observe(el));
+				window.__revealReady = true;
+			})();
+		</script>
 	</body>
 </html>
 
@@ -479,31 +520,8 @@ const graph = {
 		requestAnimationFrame(frame);
 	}
 
-	// Staggered scroll reveal for elements marked [data-reveal].
-	const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
-	if (revealEls.length) {
-		// Number each cascade's children so they can follow one another in.
-		revealEls.forEach((el) => {
-			if (el.dataset.reveal !== 'cascade') return;
-			Array.from(el.children).forEach((child, i) => (child as HTMLElement).style.setProperty('--i', String(i)));
-		});
-		const revealObserver = new IntersectionObserver(
-			(entries) => {
-				// Stagger only what arrives together, in reading order.
-				const arriving = entries
-					.filter((entry) => entry.isIntersecting)
-					.map((entry) => entry.target as HTMLElement)
-					.sort((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1));
-				arriving.forEach((el, i) => {
-					el.style.setProperty('--reveal-delay', `${Math.min(i * 70, 280)}ms`);
-					el.classList.add('is-visible');
-					revealObserver.unobserve(el);
-				});
-			},
-			{ threshold: 0, rootMargin: '0px 0px -8% 0px' }
-		);
-		revealEls.forEach((el) => revealObserver.observe(el));
-	}
+	// The scroll reveal for [data-reveal] lives in an inline script at the end
+	// of <body>, so the page's text never waits on (or dies with) this bundle.
 
 	// Screenshot gallery: lightbox with prev/next traversal.
 	const lightbox = document.getElementById('lightbox');
