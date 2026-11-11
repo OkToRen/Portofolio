@@ -212,6 +212,7 @@ const graph = {
 
 		<!-- Pointer-effect layers (fine pointer only; styled in global.css) -->
 		<div class="cursor-spotlight" aria-hidden="true"></div>
+		<canvas class="cursor-laser" aria-hidden="true"></canvas>
 		<div class="cursor-ring" aria-hidden="true"><span class="cursor-ring__inner"></span></div>
 
 		<!-- Lightbox overlay for screenshot galleries -->
@@ -529,6 +530,105 @@ const graph = {
 		});
 
 		requestAnimationFrame(frame);
+
+		// 7 · laser trail: a short, soft accent streak behind the pointer that
+		// fades within ~260ms, so it reads as a pointer, not a paint stroke.
+		const laser = document.querySelector<HTMLCanvasElement>('.cursor-laser');
+		const ctx = laser?.getContext('2d');
+		if (laser && ctx) {
+			const LIFE = 300;
+			const trail: { x: number; y: number; t: number }[] = [];
+			let color = '';
+			let running = false;
+			const readColor = () => {
+				color = getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim() || '#4f7cff';
+			};
+			const size = () => {
+				const dpr = Math.min(window.devicePixelRatio || 1, 2);
+				laser.width = innerWidth * dpr;
+				laser.height = innerHeight * dpr;
+				ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+			};
+			readColor();
+			size();
+			window.addEventListener('resize', size, { passive: true });
+			new MutationObserver(readColor).observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+
+			const draw = (now: number) => {
+				while (trail.length && now - trail[0].t > LIFE) trail.shift();
+				ctx.clearRect(0, 0, innerWidth, innerHeight);
+				if (trail.length < 2) {
+					running = false;
+					return;
+				}
+				ctx.lineCap = 'round';
+				ctx.strokeStyle = color;
+				ctx.shadowColor = color;
+				ctx.shadowBlur = 10;
+				for (let i = 1; i < trail.length; i++) {
+					const a = trail[i - 1];
+					const b = trail[i];
+					const life = 1 - (now - b.t) / LIFE; // 1 at the head, 0 at the tail
+					ctx.globalAlpha = life * 0.75;
+					ctx.lineWidth = 0.5 + life * 3;
+					ctx.beginPath();
+					ctx.moveTo(a.x, a.y);
+					ctx.lineTo(b.x, b.y);
+					ctx.stroke();
+				}
+				ctx.globalAlpha = 1;
+				requestAnimationFrame(draw);
+			};
+
+			window.addEventListener(
+				'pointermove',
+				(e) => {
+					if (e.pointerType !== 'mouse') return;
+					trail.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+					if (!running) {
+						running = true;
+						requestAnimationFrame(draw);
+					}
+				},
+				{ passive: true }
+			);
+		}
+
+		// Press: the ring tightens while the button is held.
+		window.addEventListener('pointerdown', (e) => {
+			if (e.pointerType === 'mouse' && e.button === 0) ring?.classList.add('is-pressed');
+		});
+		window.addEventListener('pointerup', () => ring?.classList.remove('is-pressed'));
+		window.addEventListener('blur', () => ring?.classList.remove('is-pressed'));
+	}
+
+	// Click ripple: a single accent ring opens from where the click lands.
+	// Mouse fires on press for instant feedback; touch waits for the click so
+	// a scroll gesture never leaves a ripple behind.
+	if (!prefersReducedMotion) {
+		const ripple = (x: number, y: number) => {
+			const el = document.createElement('span');
+			el.className = 'click-ripple';
+			el.setAttribute('aria-hidden', 'true');
+			el.style.left = `${x}px`;
+			el.style.top = `${y}px`;
+			document.body.appendChild(el);
+			el.animate(
+				[
+					{ transform: 'translate(-50%, -50%) scale(0.2)', opacity: 1 },
+					{ transform: 'translate(-50%, -50%) scale(0.75)', opacity: 0.6, offset: 0.45 },
+					{ transform: 'translate(-50%, -50%) scale(1)', opacity: 0 },
+				],
+				{ duration: 600, easing: 'cubic-bezier(0.23, 1, 0.32, 1)' }
+			).onfinish = () => el.remove();
+		};
+		window.addEventListener('pointerdown', (e) => {
+			if (e.pointerType === 'mouse' && e.button === 0) ripple(e.clientX, e.clientY);
+		});
+		window.addEventListener('click', (e) => {
+			const type = (e as PointerEvent).pointerType;
+			if (type && type !== 'mouse' && e.detail > 0) ripple(e.clientX, e.clientY);
+		});
 	}
 
 	// The scroll reveal for [data-reveal] lives in an inline script at the end
