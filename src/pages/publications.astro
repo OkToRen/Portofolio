@@ -1,0 +1,358 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Footer from '../components/Footer.astro';
+import { publications } from '../data/publications';
+import { identity, personId } from '../data/identity';
+
+/** IEEE-style reference, e.g. "D. Haryanto and I. I. Ibrahim, ..." */
+const initials = (name: string) => {
+  const parts = name.split(' ');
+  const last = parts.pop();
+  return `${parts.map((p) => `${p[0]}.`).join(' ')} ${last}`;
+};
+const cite = (p: (typeof publications)[number]) => {
+  const names = p.authors.map((a) => initials(a.name));
+  const who = names.length > 1 ? `${names.slice(0, -1).join(', ')} and ${names.at(-1)}` : names[0];
+  return `${who}, "${p.title}," presented at ${p.venue.short}, ${p.venue.place}, Indonesia, ${p.venue.date}.`;
+};
+
+const schema = [
+  {
+    '@type': 'CollectionPage',
+    url: `${identity.url}/publications`,
+    name: 'Publications by Darren Haryanto',
+    about: { '@id': personId },
+    hasPart: publications.map((p) => ({
+      '@type': 'ScholarlyArticle',
+      '@id': `${identity.url}/publications#${p.slug}`,
+      headline: p.title,
+      name: p.title,
+      abstract: p.summary,
+      keywords: p.keywords.join(', '),
+      datePublished: p.venue.iso,
+      author: p.authors.map((a) =>
+        a.self
+          ? { '@id': personId }
+          : { '@type': 'Person', name: a.name, affiliation: { '@type': 'CollegeOrUniversity', name: p.affiliation } }
+      ),
+      publication: {
+        '@type': 'PublicationEvent',
+        name: p.venue.short,
+        location: { '@type': 'Place', name: p.venue.place },
+      },
+      isBasedOn: p.links.filter((l) => l.href).map((l) => l.href),
+    })),
+  },
+];
+---
+
+<Layout
+  title="Publications | Darren Haryanto"
+  description={`Research by Darren Haryanto: ${publications.map((p) => p.title).join('; ')}.`}
+  og="publications"
+  schema={schema}
+>
+  <section class="mb-20">
+    <a
+      href="/#content"
+      class="inline-flex items-center gap-2 text-sm text-muted hover:text-accent transition-colors mb-10"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Back to portfolio
+    </a>
+
+    <h1 class="text-primary font-display font-medium text-5xl md:text-6xl tracking-tight mb-4">Publications<span class="text-accent">.</span></h1>
+    <p class="text-muted leading-relaxed text-lg max-w-2xl">
+      Research from my Computer Science degree at BINUS University, with the numbers that came out of it.
+    </p>
+  </section>
+
+  {publications.map((p) => (
+    <article id={p.slug} class="paper mb-24">
+      <header data-reveal class="mb-10">
+        <p class="paper-venue">
+          <span>{p.venue.short}</span>
+          <span aria-hidden="true">·</span>
+          <span>{p.venue.place}</span>
+          <span aria-hidden="true">·</span>
+          <span>{p.venue.date}</span>
+          <span class="paper-status">{p.status}</span>
+        </p>
+        <h2 class="paper-title">{p.title.replaceAll('-BERT', '‑BERT')}</h2>
+        <p class="paper-authors">
+          {p.authors.map((a, i) => (
+            <>
+              {i > 0 && <span class="text-muted">{i === p.authors.length - 1 ? ' and ' : ', '}</span>}
+              <span class={a.self ? 'author-self' : ''}>{a.name}</span>
+            </>
+          ))}
+          <span class="text-muted">, {p.affiliation}</span>
+        </p>
+      </header>
+
+      <p data-reveal class="text-primary/90 leading-relaxed text-lg max-w-[68ch] mb-14">{p.summary}</p>
+
+      <h3 data-reveal class="paper-label">What it found</h3>
+      <ol class="findings mb-14">
+        {p.findings.map((f) => (
+          <li data-reveal class="finding">
+            <span class="finding-figure">{f.figure}</span>
+            <span class="finding-label">{f.label}</span>
+            <p class="finding-detail">{f.detail}</p>
+          </li>
+        ))}
+      </ol>
+
+      <div class="grid gap-12 md:grid-cols-[3fr_2fr] mb-14">
+        <div data-reveal>
+          <h3 class="paper-label">How it was tested</h3>
+          <ul class="method">
+            {p.method.map((m) => <li>{m}</li>)}
+          </ul>
+        </div>
+        <div data-reveal>
+          <h3 class="paper-label">Read and reuse</h3>
+          <ul class="space-y-4">
+            {p.links.map((l) => (
+              <li>
+                {l.href ? (
+                  <a href={l.href} target="_blank" rel="noopener" class="paper-link group">
+                    <span>{l.label}</span>
+                    <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 17L17 7M9 7h8v8"></path>
+                    </svg>
+                  </a>
+                ) : (
+                  <span class="text-primary font-medium">{l.label}</span>
+                )}
+                {l.note && <span class="block text-sm text-muted mt-1">{l.note}</span>}
+              </li>
+            ))}
+          </ul>
+          <ul class="flex flex-wrap gap-2 mt-8" aria-label="Keywords">
+            {p.keywords.map((k) => (
+              <li class="text-xs text-muted font-mono border border-border rounded-full px-2.5 py-0.5">{k}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <div data-reveal class="cite">
+        <div class="flex items-center justify-between gap-4 mb-3">
+          <h3 class="paper-label !mb-0">Cite</h3>
+          <button type="button" class="cite-copy" data-cite={cite(p)}>
+            <span class="cite-copy-text">Copy</span>
+          </button>
+        </div>
+        <p class="font-mono text-sm text-muted leading-relaxed">{cite(p)}</p>
+      </div>
+    </article>
+  ))}
+
+  <Footer class="mt-16 pt-16" />
+</Layout>
+
+<style>
+  .paper-venue {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.6rem;
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.8rem;
+    color: var(--color-accent);
+    margin-bottom: 1.25rem;
+  }
+
+  .paper-status {
+    margin-left: 0.25rem;
+    font-family: var(--font-inter-tight), sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.65rem;
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--color-accent) 12%, transparent);
+  }
+
+  .paper-title {
+    font-family: var(--font-fraunces), serif;
+    font-weight: 500;
+    font-size: clamp(1.9rem, 1.3rem + 2.4vw, 3rem);
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    color: var(--color-primary);
+    text-wrap: balance;
+    max-width: 24ch;
+    margin-bottom: 1.25rem;
+  }
+
+  .paper-authors {
+    font-size: 1.05rem;
+    color: var(--color-primary);
+  }
+
+  .author-self {
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
+  }
+
+  .paper-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
+  }
+
+  /* The three findings as figures on a ruled line, not boxes: the number
+     carries the weight, the label names it, the sentence explains it. */
+  .findings {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  @media (min-width: 900px) {
+    .findings {
+      /* the leakage figure is the widest, so its column is too */
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.35fr);
+      gap: 2rem;
+    }
+  }
+
+  .finding {
+    border-top: 1px solid var(--color-border);
+    padding-top: 1.25rem;
+  }
+
+  .finding-figure {
+    display: block;
+    font-family: var(--font-fraunces), serif;
+    font-size: clamp(2.1rem, 1.5rem + 1.6vw, 2.9rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .finding-label {
+    display: block;
+    margin-top: 0.6rem;
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+
+  .finding-detail {
+    margin-top: 0.5rem;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: var(--color-muted);
+  }
+
+  .method {
+    list-style: none;
+    padding: 0;
+    counter-reset: m;
+  }
+
+  .method li {
+    counter-increment: m;
+    position: relative;
+    padding: 0.85rem 0 0.85rem 2.5rem;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-muted);
+    line-height: 1.55;
+  }
+
+  .method li::before {
+    content: counter(m, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0.95rem;
+    font-family: var(--font-jetbrains-mono), monospace;
+    font-size: 0.75rem;
+    color: var(--color-accent);
+  }
+
+  .paper-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  .paper-link:hover span {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .cite {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+  }
+
+  .cite-copy {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    padding: 0.3rem 0.9rem;
+    min-width: 5.5rem;
+    transition: transform 160ms var(--ease-out), border-color 200ms ease;
+  }
+
+  .cite-copy:hover {
+    border-color: var(--color-accent);
+  }
+
+  .cite-copy:active {
+    transform: scale(0.97);
+  }
+
+  .cite-copy-text {
+    display: inline-block;
+    transition: opacity 150ms ease, filter 150ms ease;
+  }
+
+  .cite-copy.is-swapping .cite-copy-text {
+    opacity: 0;
+    filter: blur(2px);
+  }
+
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.cite-copy').forEach((btn) => {
+    const text = btn.querySelector<HTMLElement>('.cite-copy-text');
+    let timer: number | undefined;
+    const swap = (label: string) => {
+      btn.classList.add('is-swapping');
+      setTimeout(() => {
+        if (text) text.textContent = label;
+        btn.classList.remove('is-swapping');
+      }, 150);
+    };
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.cite ?? '');
+        swap('Copied');
+      } catch {
+        swap('Select it');
+      }
+      clearTimeout(timer);
+      timer = window.setTimeout(() => swap('Copy'), 1800);
+    });
+  });
+</script>
