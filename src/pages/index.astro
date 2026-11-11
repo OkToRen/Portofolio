@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import { projects } from '../data/projects';
+import { publications } from '../data/publications';
 import { identity, personId } from '../data/identity';
 
 // Show featured projects on the home page (fall back to the first few).
@@ -371,6 +372,48 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
         </a>
       ))}
     </div>
+  </section>
+
+  <!-- Publications Section -->
+  <section id="publications" class="mb-24 pb-16 border-b border-border">
+    <div data-reveal class="flex items-center justify-between mb-8">
+      <h2 class="text-primary font-bold uppercase tracking-wider text-sm">Publications</h2>
+      <a href="/publications" class="text-xs text-accent hover:underline font-medium inline-flex items-center gap-1">
+        View all
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+    <ul class="pubs">
+      {publications.map((p) => (
+        <li>
+          <a href={`/publications#${p.slug}`} data-reveal="cascade" class="pub group">
+            <div class="pub-main">
+              <p class="pub-venue">
+                <span>{p.venue.short}</span>
+                <span aria-hidden="true">·</span>
+                <span>{p.venue.date}</span>
+                <span class="pub-status">{p.status}</span>
+              </p>
+              <h3 class="pub-title">{p.title.replaceAll('-BERT', '‑BERT')}</h3>
+              <p class="pub-authors">
+                {p.authors.map((a, i) => (
+                  <>
+                    {i > 0 && (i === p.authors.length - 1 ? ' and ' : ', ')}
+                    <span class={a.self ? 'pub-self' : ''}>{a.name}</span>
+                  </>
+                ))}
+              </p>
+            </div>
+            <div class="pub-figure">
+              <span class="pub-figure-value">{p.findings[0].figure}</span>
+              <span class="pub-figure-label">{p.findings[0].label}</span>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
   </section>
 
   <!-- Education & Organization Section -->
@@ -1042,6 +1085,105 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
     .doodle-5 {
       width: 100px;
       height: 100px;
+    }
+  }
+
+  /* Publications: a ruled entry rather than another card, so it reads as a
+     reference list. The headline result sits beside the title. */
+  .pubs {
+    list-style: none;
+    padding: 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .pub {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem 3rem;
+    align-items: end;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .pub-venue {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.3rem 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    margin-bottom: 0.85rem;
+  }
+
+  .pub-status {
+    margin-left: 0.2rem;
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    background: color-mix(in oklch, var(--color-accent) 12%, transparent);
+  }
+
+  .pub-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(1.35rem, 1.1rem + 0.9vw, 1.75rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-primary);
+    text-wrap: balance;
+    max-width: 30ch;
+    transition: color 200ms ease;
+  }
+
+  .pub-authors {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--color-muted);
+  }
+
+  .pub-self {
+    color: var(--color-primary);
+    font-weight: 600;
+  }
+
+  .pub-figure {
+    text-align: right;
+  }
+
+  .pub-figure-value {
+    display: block;
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 1.6rem + 2vw, 3rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--color-accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pub-figure-label {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .pub:hover .pub-title {
+      color: var(--color-accent);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .pub {
+      grid-template-columns: 1fr;
+    }
+    .pub-figure {
+      text-align: left;
     }
   }
 </style>
