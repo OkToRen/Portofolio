@@ -25,6 +25,34 @@ export const identity = {
 /** schema.org Person, referenced by @id from every other node on the site. */
 export const personId = `${identity.url}/#person`;
 
+/** The portrait at a stable, named URL (public/darren-haryanto.jpg), so
+ *  Google Images can index it under Darren's name. Kept in step with
+ *  src/assets/darren-haryanto.jpg, which the page itself renders. */
+export const portrait = {
+  id: `${identity.url}/#portrait`,
+  url: `${identity.url}/darren-haryanto.jpg`,
+  width: 1200,
+  height: 1500,
+  caption: 'Darren Haryanto smiling, wearing glasses and a pink, green and blue batik shirt',
+};
+
+export function portraitSchema() {
+  return {
+    '@type': 'ImageObject',
+    '@id': portrait.id,
+    url: portrait.url,
+    contentUrl: portrait.url,
+    width: portrait.width,
+    height: portrait.height,
+    caption: portrait.caption,
+    name: identity.name,
+    representativeOfPage: true,
+    creator: { '@id': personId },
+    creditText: identity.name,
+    copyrightNotice: `© ${identity.name}`,
+  };
+}
+
 export function personSchema() {
   return {
     '@type': 'Person',
@@ -35,7 +63,7 @@ export function personSchema() {
     additionalName: 'Oliver Putra',
     familyName: 'Haryanto',
     url: identity.url,
-    image: `${identity.url}/og/home.jpg`,
+    image: portraitSchema(),
     email: `mailto:${identity.email}`,
     jobTitle: identity.jobTitle,
     description: identity.summary,

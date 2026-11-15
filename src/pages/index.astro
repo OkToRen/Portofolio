@@ -2,10 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import Footer from '../components/Footer.astro';
 import { Picture } from 'astro:assets';
-import portrait from '../assets/darren-portrait.jpg';
+import portrait from '../assets/darren-haryanto.jpg';
 import { projects } from '../data/projects';
 import { publications } from '../data/publications';
-import { identity, personId } from '../data/identity';
+import { identity, personId, portrait as portraitMeta } from '../data/identity';
 
 // Show featured projects on the home page (fall back to the first few).
 const featuredProjects = projects.filter((p) => p.featured);
@@ -106,6 +106,7 @@ const stackProjects = projects.filter((p) => strata.some((s) => s.skills.some((k
     name: 'Darren Haryanto',
     mainEntity: { '@id': personId },
     about: { '@id': personId },
+    primaryImageOfPage: { '@id': portraitMeta.id },
   }]}
 >
   <!-- Full-Screen Hero Section with Parallax -->
